@@ -1,0 +1,77 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "WaitingRoom",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.nurse.WaitingRoom",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Patients",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.nurse.Patients",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "SalleAttente",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.nurse.SalleAttente",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "Test",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Launch DashboardNurse",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.nurse.DashboardNurse",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Launch Dashboard",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.Dashboard",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Launch patient",
+            "request": "launch",
+            "mainClass": "IHM.patient",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Launch MedicalCabinet",
+            "request": "launch",
+            "mainClass": "BDD.MedicalCabinet",
+            "projectName": "MED+_27ee9ab"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch Login",
+            "request": "launch",
+            "mainClass": "IHM.Login",
+            "projectName": "MED+_27ee9ab"
+        }
+    ]
+}
