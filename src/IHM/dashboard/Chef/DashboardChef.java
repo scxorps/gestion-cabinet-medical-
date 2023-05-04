@@ -1,4 +1,4 @@
-package IHM.dashboard.nurse;
+package IHM.dashboard.Chef;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
@@ -15,43 +15,42 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 
-public class DashboardNurse extends JFrame {
+public class DashboardChef extends JFrame {
 
     private JButton Acceuil;
-    private JButton Patient;
-    private JButton informations;
+   // private JButton finance;
+    //private JButton informations;
     private JButton logout;
 
-    public DashboardNurse(String name, String role, int page) {
+    public DashboardChef(String name, String role, int page) {
 
-        super("Tableau de bord");
+        super("Utilisateur");
         System.out.println(name + " " + role);
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        dragFrame move = new dragFrame(this);
+        //dragFrame move = new dragFrame(this);
 
-        this.addMouseListener(move);
-        this.addMouseMotionListener(move);
+        //this.addMouseListener(move);
+        //this.addMouseMotionListener(move);
         
         JPanel panel1 = new JPanel();
         panel1.setLayout(null
         );
-        panel1.add(new WaitingRoom(this));
+        panel1.add(new Users(this));
 
        
-        JPanel panel2 = new JPanel();
-        panel2.setLayout(null);
-        panel2.add(new Patients(this));
+        // JPanel panel2 = new JPanel();
+        // panel2.setLayout(null);
+        // panel2.add(new finance(this));
 
 
-        JPanel panel3 = new JPanel();
-        panel3.setLayout(null);
-        panel3.add(new Informations(this));
+        // JPanel panel3 = new JPanel();
+        // panel3.setLayout(null);
+        // panel3.add(new Informations(this));
 
         // Add the panels to the tabbed pane
         tabbedPane.addTab("Tab 1", panel1);
-        tabbedPane.addTab("Tab 2", panel2);
-        tabbedPane.addTab("Tab 3", panel3);
+        
         tabbedPane.setBounds(200, -25, 1200, 800);
         ImageIcon logo = new ImageIcon("./src/IMJ/Logo.png");
         JLabel lgLab = new JLabel(logo);
@@ -112,33 +111,33 @@ public class DashboardNurse extends JFrame {
         this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         this.Acceuil.setFont(new Font("Arial", Font.BOLD, 16));
 
-        this.Acceuil.addActionListener(e -> {
+       /*  this.Acceuil.addActionListener(e -> {
             tabbedPane.setSelectedIndex(0);
             this.Acceuil.setBackground(new Color(0X011b45));
-            this.Patient.setBackground(new Color(0x07337a));
+            this.finance.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0x07337a));
-            this.Patient.setBorder(null);
+            this.finance.setBorder(null);
             this.informations.setBorder(null);
             this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         });
         
-        this.Patient = new JButton("Patients");
-        this.Patient.setBounds(0, 260, 200, 60);
-        this.Patient.setForeground(Color.WHITE);
-        this.Patient.setFocusable(false);
-        this.Patient.setBorder(null);
-        this.Patient.setBackground(new Color(0x07337a));
-        this.Patient.setFont(new Font("Arial", Font.BOLD, 16));
+        this.finance = new JButton("finances");
+        this.finance.setBounds(0, 260, 200, 60);
+        this.finance.setForeground(Color.WHITE);
+        this.finance.setFocusable(false);
+        this.finance.setBorder(null);
+        this.finance.setBackground(new Color(0x07337a));
+        this.finance.setFont(new Font("Arial", Font.BOLD, 16));
 
-        this.Patient.addActionListener(e -> {
+        this.finance.addActionListener(e -> {
             
             tabbedPane.setSelectedIndex(1);
             this.Acceuil.setBackground(new Color(0x07337a));
-            this.Patient.setBackground(new Color(0X011b45));
+            this.finance.setBackground(new Color(0X011b45));
             this.informations.setBackground(new Color(0x07337a));
             this.informations.setBorder(null);
             this.Acceuil.setBorder(null);
-            this.Patient.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
+            this.finance.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
 
         });
 
@@ -153,14 +152,14 @@ public class DashboardNurse extends JFrame {
         this.informations.addActionListener(e -> {
            
             tabbedPane.setSelectedIndex(2);
-            this.Patient.setBackground(new Color(0x07337a));
+            this.finance.setBackground(new Color(0x07337a));
             this.Acceuil.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0X011b45));
-            this.Patient.setBorder(null);
+            this.finance.setBorder(null);
             this.Acceuil.setBorder(null);
             this.informations.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         });
-
+*/
         this.logout = new JButton("Deconnexion");
         this.logout.setBounds(0, 710, 200, 60);
         this.logout.setBackground(Color.RED);
@@ -182,14 +181,13 @@ public class DashboardNurse extends JFrame {
         });
 
 
-
-        switch(page){
+/*switch(page){
             case 0: {
             tabbedPane.setSelectedIndex(0);
             this.Acceuil.setBackground(new Color(0X011b45));
-            this.Patient.setBackground(new Color(0x07337a));
+            this.finance.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0x07337a));
-            this.Patient.setBorder(null);
+            this.finance.setBorder(null);
             this.informations.setBorder(null);
             this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
             break;
@@ -197,25 +195,25 @@ public class DashboardNurse extends JFrame {
             case 1: {
                 tabbedPane.setSelectedIndex(1);
             this.Acceuil.setBackground(new Color(0x07337a));
-            this.Patient.setBackground(new Color(0X011b45));
+            this.finance.setBackground(new Color(0X011b45));
             this.informations.setBackground(new Color(0x07337a));
             this.informations.setBorder(null);
             this.Acceuil.setBorder(null);
-            this.Patient.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
+            this.finance.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
             break;
             }
             case 2: {
                 tabbedPane.setSelectedIndex(2);
-            this.Patient.setBackground(new Color(0x07337a));
+            this.finance.setBackground(new Color(0x07337a));
             this.Acceuil.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0X011b45));
-            this.Patient.setBorder(null);
+            this.finance.setBorder(null);
             this.Acceuil.setBorder(null);
             this.informations.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
             break;
             }
         }
-
+*/
         JPanel p = new JPanel();
         p.setBounds(0, 0, 200, 900);
         p.setLayout(null);
@@ -230,9 +228,9 @@ public class DashboardNurse extends JFrame {
 
         
         //this.add(lgLab);
-        p.add(this.Patient);
+        //p.add(this.finance);
         p.add(this.Acceuil);
-        p.add(this.informations);
+        //p.add(this.informations);
         p.add(this.logout);
         add(p);
         add(tabbedPane);
@@ -240,26 +238,6 @@ public class DashboardNurse extends JFrame {
     }
 
     public static void main(String[] args) {
-        new DashboardNurse(Login.name, Login.role, 0);
-    }
-}
-
-class dragFrame extends MouseInputAdapter {
-
-    private int posX, posY;
-    private final JFrame frame;
-
-    dragFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
-    public void mousePressed(MouseEvent e) {
-        posX = e.getX();
-        posY = e.getY();
-    }
-
-    public void mouseDragged(MouseEvent evt) {
-        this.frame.setLocation(evt.getXOnScreen() - posX, evt.getYOnScreen() - posY);
-
+        new DashboardChef(Login.name, Login.role, 0);
     }
 }

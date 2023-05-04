@@ -11,6 +11,7 @@ import java.sql.Date;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 
+import BDD.Doctor;
 import BDD.bdd;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -20,6 +21,9 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class EditPatient extends JFrame {
+
+    private int docIndex;
+
     private JLabel dateLabel;
     private JLabel nomlabel;
     private JLabel prenomLabel;
@@ -27,6 +31,7 @@ public class EditPatient extends JFrame {
     private JLabel sexeLabel;
     private JLabel num_telephoneLabel;
     private JLabel adresselLabel;
+    private JLabel doctorLabel;
     private JTextField nomField;
     private JTextField prenomField;
     private JTextField ageField;
@@ -38,10 +43,15 @@ public class EditPatient extends JFrame {
 
     public EditPatient(String id, String rdv, String nom, String prenom, String age, String gender, String n_tel,
             String adresse,
-            JFrame f) {
+            JFrame f, String doctor) {
         super("Modifier Patient");
         bdd db = new bdd();
 
+
+        String[] doctorItem = db.getSingleDoctor(doctor);
+        Item doc = new Item(doctorItem[0], doctorItem[1] + " / " + doctorItem[2]);
+        System.out.println(doc.getId() + " " + doc.getDescription());
+        
         
         JLabel xExit = new JLabel("X");
         JLabel _minimise = new JLabel("_");
@@ -73,7 +83,7 @@ public class EditPatient extends JFrame {
         _minimise.setFont(new Font("monospace", Font.BOLD, 15));
         _minimise.setForeground(Color.black);
         _minimise.setBounds(440, 2, 10, 20);
-        ImageIcon backGround = new ImageIcon("./src/IMJ/bg.jpg");
+        ImageIcon backGround = new ImageIcon("./src/IMJ/form2.jpg");
         JLabel bgLab = new JLabel(backGround);
         bgLab.setBounds(0, 0, 800, 550);
 
@@ -194,17 +204,43 @@ public class EditPatient extends JFrame {
 
         });
 
+        doctorLabel = new JLabel("Docteur assigné");
+        doctorLabel.setBounds(50, 450, 150, 30);
+        Object[][] doctors = db.getDoctor();
+
+        Item[] cbDoctor = new Item[doctors.length + 1];
+        cbDoctor[0] = new Item("None", "Selectionner le docteur");
+        for (int i = 0; i < doctors.length; i++) {
+            if(doc.getId() == doctors[i][1]){
+                docIndex = i + 1;
+            }
+            String desc =  doctors[i][1] + " / " + doctors[i][2];
+            String ident = doctors[i][0].toString();
+
+            cbDoctor[i+1] = new Item(ident, desc);
+
+          
+            if(doc.getId().equals(cbDoctor[i+1].getId())){
+            docIndex = i + 1;
+            }
+
+        }
+        JComboBox<Item> doctorField = new JComboBox<>(cbDoctor);
+        doctorField.setSelectedIndex(docIndex);
+        doctorField.setBounds(150, 450, 300, 30);
+
+
         adresselLabel = new JLabel("Adresse");
         adresselLabel.setBounds(50, 350, 150, 30);
         adressField = new JTextField(adresse);
         adressField.setBounds(250, 350, 200, 30);
 
         addButton = new JButton("Confirmer");
-        addButton.setBounds(100, 400, 100, 30);
+        addButton.setBounds(100, 500, 100, 30);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.GREEN);
         cancelButton = new JButton("Annuler");
-        cancelButton.setBounds(300, 400, 100, 30);
+        cancelButton.setBounds(300, 500, 100, 30);
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setBackground(Color.RED);
 
@@ -223,9 +259,11 @@ public class EditPatient extends JFrame {
             boolean isPhoneEmpty = num_telephoneField.getText().isEmpty();
             boolean isAdressEmpty = adressField.getText().isEmpty();
             boolean isdateEmpty = dateField.getModel().getValue() == null;
+            Item doct = (Item) doctorField.getSelectedItem();
+            boolean isDoctorEmpty = doct.getId().equals("None");
 
 
-            if (isdateEmpty ||isNameEmpty || isSurnameEmpty || isAgeEmpty || isGenderEmpty || isPhoneEmpty || isAdressEmpty) {
+            if (isdateEmpty ||isNameEmpty || isSurnameEmpty || isAgeEmpty || isGenderEmpty || isPhoneEmpty || isAdressEmpty || isDoctorEmpty) {
                 JOptionPane.showMessageDialog(null, "Veuillez remplir tout les cases", "Erreur",
                         JOptionPane.ERROR_MESSAGE);
             } else {
@@ -234,14 +272,16 @@ public class EditPatient extends JFrame {
                         ageModify = ageField.getText(),
                         genderModify = sexeField.getSelectedItem().toString(),
                         phoneModify = num_telephoneField.getText(),
-                        adressModify = adressField.getText();
+                        adressModify = adressField.getText(),
+                        doctorModify = doct.getId();
+
 
                 
                 
                         java.util.Date date = (java.util.Date) dateField.getModel().getValue();
                         java.sql.Date d = new java.sql.Date(date.getTime());
 
-                if (db.updatePatient(id, nomModify, prenomModify, ageModify, genderModify, phoneModify, adressModify, d)) {
+                if (db.updatePatient(id, nomModify, prenomModify, ageModify, genderModify, phoneModify, adressModify, d, doctorModify)) {
                     JOptionPane.showMessageDialog(null, "Patient est bien modifié", "Succes", JOptionPane.PLAIN_MESSAGE,
                             new ImageIcon("./img/logo.jpg"));
                     dispose();
@@ -280,6 +320,8 @@ public class EditPatient extends JFrame {
         add(nomField);
         add(prenomLabel);
         add(prenomField);
+        add(doctorLabel);
+        add(doctorField);
         add(ageLabel);
         add(ageField);
         add(sexeLabel);
@@ -290,7 +332,7 @@ public class EditPatient extends JFrame {
         add(adressField);
         add(bgLab);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 500);
+        setSize(500, 600);
         setLayout(null);
         setLocationRelativeTo(null);
         setUndecorated(true);
@@ -316,5 +358,27 @@ class dragFrame extends MouseInputAdapter {
     public void mouseDragged(MouseEvent evt) {
         this.frame.setLocation(evt.getXOnScreen() - posX, evt.getYOnScreen() - posY);
 
+    }
+}
+
+class Item {
+    private String id;
+    private String description;
+
+    public Item(String id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String toString() {
+        return description;
     }
 }

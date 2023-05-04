@@ -1,4 +1,4 @@
-package IHM.dashboard.nurse;
+package IHM.dashboard.Chef;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +7,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,29 +31,29 @@ import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
-public class AddPatient extends JFrame {
+public class AddUsers extends JFrame {
     
     private JLabel title;
     private JLabel dateLabel;
     private JLabel nomlabel;
     private JLabel prenomLabel;
     private JLabel ageLabel;
-    private JLabel sexeLabel;
-    private JLabel num_telephoneLabel;
-    private JLabel adresselLabel;
+    private JLabel roleLabel;
+    private JLabel usernameLabel;
+    private JLabel passwordlLabel;
     private JLabel doctorLabel;
     private JTextField nomField;
     private JTextField prenomField;
     private JTextField ageField;
-    private JComboBox sexeField;
+    private JComboBox roleField;
     private JComboBox doctorField;
-    private JTextField num_telephoneField;
-    private JTextField adressField;
+    private JTextField usernameField;
+    private JTextField passwordField;
     private JButton addButton;
     private JButton cancelButton;
 
-    public AddPatient(JFrame f) {
-        super("Ajouter Patient");
+    public AddUsers(JFrame f) {
+        super("Ajouter Utilisateur");
         bdd db = new bdd();
         dragFrame move = new dragFrame(this);
 
@@ -78,10 +77,9 @@ public class AddPatient extends JFrame {
             @Override
             public void mousePressed(MouseEvent ev) {
                 dispose();
-                Patients.addBtn.setEnabled(true);
-                Patients.editBtn.setEnabled(true);
-                Patients.deleteBtn.setEnabled(true);
-                Patients.printBtn.setEnabled(true);
+                Users.addBtn.setEnabled(true);
+                Users.deleteBtn.setEnabled(true);
+                Users.printBtn.setEnabled(true);
             }
             
             @Override
@@ -123,7 +121,7 @@ public class AddPatient extends JFrame {
         UtilDateModel model = new UtilDateModel();
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
         JDatePickerImpl dateField = new JDatePickerImpl(datePanel);
-        dateLabel = new JLabel("Render-vous");
+        dateLabel = new JLabel("Date de recrutement");
         dateLabel.setBounds(50, 50, 150, 30);
         dateLabel.setFont(new Font("monospace", Font.BOLD, 14));
         dateField.setBounds(250, 50, 200, 30);
@@ -136,28 +134,6 @@ public class AddPatient extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 java.util.Date date = (java.util.Date) dateField.getModel().getValue();
                 java.sql.Date d = new java.sql.Date(date.getTime());
-
-                LocalDate today = LocalDate.now();
-                LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-                if(!today.isBefore(localDate)){
-                    JOptionPane.showMessageDialog(null, "Vous ne pouvez pas selectionner la date avant Aujourd'hui", "Erreur", JOptionPane.ERROR_MESSAGE);
-                    LocalDate dateObj = LocalDate.now();
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    String rdv = dateObj.format(formatter).toString();
-                    String[] dates = rdv.split("-", 3);
-                    dateField.getModel().setDate(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]) - 1,
-                    Integer.parseInt(dates[2]));
-                    dateField.getModel().setSelected(true);
-                }
-                LocalDate dateToCheck = LocalDate.of(date.getYear(), date.getMonth(), date.getDay()); // Replace with the date you want to check
-
-
-                // Create a LocalDate object for the date you want to check
-                
-               
-
-                
 
                 if(db.isWaitingRoomFull(d)){
                     JOptionPane.showMessageDialog(null, "Salle d'attente est complete", "Erreur",
@@ -173,7 +149,7 @@ public class AddPatient extends JFrame {
                 Integer.parseInt(dates[2]));
         dateField.getModel().setSelected(true);
                 
-        nomlabel = new JLabel("Nom de patient");
+        nomlabel = new JLabel("Nom");
         nomlabel.setBounds(50, 100, 150, 30);
         nomField = new JTextField();
         nomField.setBounds(250, 100, 200, 30);
@@ -187,7 +163,7 @@ public class AddPatient extends JFrame {
             }
         });
 
-        prenomLabel = new JLabel("Prenom de patient");
+        prenomLabel = new JLabel("Prenom");
         prenomLabel.setBounds(50, 150, 150, 30);
         prenomField = new JTextField();
         prenomField.setBounds(250, 150, 200, 30);
@@ -201,7 +177,7 @@ public class AddPatient extends JFrame {
             }
 
         });
-        ageLabel = new JLabel("age de patient");
+        ageLabel = new JLabel("age");
         ageLabel.setBounds(50, 200, 150, 30);
         ageField = new JTextField();
         ageField.setBounds(250, 200, 200, 30);
@@ -216,47 +192,23 @@ public class AddPatient extends JFrame {
 
         });
 
-        sexeLabel = new JLabel("Sexe");
-        sexeLabel.setBounds(50, 250, 150, 30);
-        String[] sexe = { "Choisir votre sexe", "Homme", "Femme" };
-        sexeField = new JComboBox<>(sexe);
-        sexeField.setBounds(250, 250, 200, 30);
+        roleLabel = new JLabel("Role");
+        roleLabel.setBounds(50, 250, 150, 30);
+        String[] role = { "Choisir le role", "Doctor", "Nurse" };
+        roleField = new JComboBox<>(role);
+        roleField.setBounds(250, 250, 200, 30);
 
-        num_telephoneLabel = new JLabel("N=°Telephone");
-        num_telephoneLabel.setBounds(50, 300, 150, 30);
-        num_telephoneField = new JTextField();
-        num_telephoneField.setBounds(250, 300, 200, 30);
-        num_telephoneField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if ((Character.isAlphabetic(c) || (c == KeyEvent.VK_BACK_SPACE) || c == KeyEvent.VK_DELETE)) {
-                    e.consume();
-                }
-            }
+        usernameLabel = new JLabel("Username");
+        usernameLabel.setBounds(50, 300, 150, 30);
+        usernameField = new JTextField();
+        usernameField.setBounds(250, 300, 200, 30);
+        
+        passwordlLabel = new JLabel("Password");
+        passwordlLabel.setBounds(50, 350, 150, 30);
+        passwordField = new JTextField();
+        passwordField.setBounds(250, 350, 200, 30);
 
-        });
-
-        adresselLabel = new JLabel("Adresse");
-        adresselLabel.setBounds(50, 350, 150, 30);
-        adressField = new JTextField();
-        adressField.setBounds(250, 350, 200, 30);
-
-        doctorLabel = new JLabel("Docteur assigné");
-        doctorLabel.setBounds(50, 450, 150, 30);
-        Object[][] doctors = db.getDoctor();
-
-        Item[] cbDoctor = new Item[doctors.length + 1];
-        cbDoctor[0] = new Item("None", "Selectionner le docteur");
-        for (int i = 0; i < doctors.length; i++) {
-            String desc =  doctors[i][1] + " / " + doctors[i][2];
-            String id = doctors[i][0].toString();
-
-            cbDoctor[i+1] = new Item(id, desc);
-
-        }
-        doctorField = new JComboBox(cbDoctor);
-        doctorField.setBounds(150, 450, 300, 30);
+        
 
 
         addButton = new JButton("Ajouter");
@@ -270,44 +222,41 @@ public class AddPatient extends JFrame {
 
         cancelButton.addActionListener(e -> {
             dispose();
-            Patients.addBtn.setEnabled(true);
-            Patients.editBtn.setEnabled(true);
-            Patients.deleteBtn.setEnabled(true);
-            Patients.printBtn.setEnabled(true);
+            Users.addBtn.setEnabled(true);
+            Users.deleteBtn.setEnabled(true);
+            Users.printBtn.setEnabled(true);
         });
         addButton.addActionListener(e -> {
             //boolean isdateEmpty = dateField.getText().isEmpty();
             boolean isNameEmpty = nomField.getText().isEmpty();
             boolean isSurnameEmpty = prenomField.getText().isEmpty();
             boolean isAgeEmpty = ageField.getText().isEmpty();
-            boolean isGenderEmpty = sexeField.getSelectedItem().equals("Choisir votre sexe");
-            boolean isPhoneEmpty = num_telephoneField.getText().isEmpty();
-            boolean isAdressEmpty = adressField.getText().isEmpty();
+            boolean isroleEmpty = roleField.getSelectedItem().equals("Choisir votre role");
+            boolean isusernameEmpty = usernameField.getText().isEmpty();
+            boolean ispasswordmpty = passwordField.getText().isEmpty();
             boolean isdateEmpty = dateField.getModel().getValue() == null;
-            Item doctor = (Item) doctorField.getSelectedItem();
-            boolean isDoctorEmpty = doctor.getId().equals("None");
+            
 
 
-            if ( isdateEmpty ||isNameEmpty || isSurnameEmpty || isAgeEmpty || isGenderEmpty || isPhoneEmpty || isAdressEmpty || isDoctorEmpty) {
+            if ( isdateEmpty ||isNameEmpty || isSurnameEmpty || isAgeEmpty || isroleEmpty || isusernameEmpty || ispasswordmpty) {
                 JOptionPane.showMessageDialog(null, "Veuillez remplir tout les cases", "Erreur",
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 String nom = nomField.getText(),
                         prenom = prenomField.getText(),
                         age = ageField.getText(),
-                        gender = sexeField.getSelectedItem().toString(),
-                        phone = num_telephoneField.getText(),
-                        adress = adressField.getText(),
-                        dc = doctor.getId();
+                        roleDoc = roleField.getSelectedItem().toString(),
+                        username = usernameField.getText(),
+                        password = passwordField.getText();
 
                         java.util.Date date = (Date) dateField.getModel().getValue();
                         java.sql.Date d = new java.sql.Date(date.getTime());
-                if (db.InsertPatient(nom, prenom, age, gender, phone, adress, d, dc)) {
+                if (db.InsertUsers(nom, prenom, age, roleDoc, username, password, d)) {
                     JOptionPane.showMessageDialog(null, "Patient est bien ajouté", "Succes", JOptionPane.PLAIN_MESSAGE,
                             new ImageIcon("./img/logo.jpg"));
                     dispose();
                     f.dispose();
-                    new DashboardNurse(Login.name, Login.role, 1);
+                    new DashboardChef(Login.name, Login.role, 1);
                 } else {
                     JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -338,18 +287,17 @@ public class AddPatient extends JFrame {
         add(dateField);
         add(nomlabel);
         add(nomField);
-        add(doctorField);
-        add(doctorLabel);
+        
         add(prenomLabel);
         add(prenomField);
         add(ageLabel);
         add(ageField);
-        add(sexeLabel);
-        add(sexeField);
-        add(num_telephoneLabel);
-        add(num_telephoneField);
-        add(adresselLabel);
-        add(adressField);
+        add(roleLabel);
+        add(roleField);
+        add(usernameLabel);
+        add(usernameField);
+        add(passwordlLabel);
+        add(passwordField);
         add(bgLab);
          this.add(lgLab);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

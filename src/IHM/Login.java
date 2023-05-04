@@ -38,8 +38,8 @@ public class Login extends JFrame {
     bdd b;
     Doctor d = null;
     Nurse n = null;
-    public static String name=null;
-    public static String role=null;
+    public static String name = null;
+    public static String role = null;
 
     public static Color cabCol = new Color(0x1D4D99);
 
@@ -51,9 +51,9 @@ public class Login extends JFrame {
         this.addMouseMotionListener(move);
 
         ImageIcon backGround = new ImageIcon("./src/IMJ/cabimg.png");
-         ImageIcon logo = new ImageIcon("./src/IMJ/Logo.png");
-         JLabel lgLab = new JLabel(logo);
-         lgLab.setBounds(50,50,100, 68);
+        ImageIcon logo = new ImageIcon("./src/IMJ/mylogo.png");
+        JLabel lgLab = new JLabel(logo);
+        lgLab.setBounds(50, 50, 100, 68);
         JLabel bgLab = new JLabel(backGround);
         JLabel xExit = new JLabel("X");
         JLabel _minimise = new JLabel("_");
@@ -170,23 +170,27 @@ public class Login extends JFrame {
                                 rs.getString("username"),
                                 rs.getString("password"));
 
-                      /*   System.out.println(d.getName());
-                        System.out.println(d.getSurname());
-                        System.out.println(d.getAge());
-                        System.out.println(d.role); */
+                        /*
+                         * System.out.println(d.getName());
+                         * System.out.println(d.getSurname());
+                         * System.out.println(d.getAge());
+                         * System.out.println(d.role);
+                         */
                     } else if ("Nurse".equals(rs.getString("Role"))) {
-                       /*  n = new Nurse(
-                                 rs.getInt("id"),
-                                rs.getDate("date_recrut"),
-                                rs.getString("name"),
-                                rs.getString("surname"),
-                                rs.getInt("age"),
-                                rs.getString("username"),
-                                rs.getString("password"));
-                        System.out.println(n.getName());
-                        System.out.println(n.getSurname());
-                        System.out.println(n.getAge());
-                        System.out.println(n.role); */ 
+                        /*
+                         * n = new Nurse(
+                         * rs.getInt("id"),
+                         * rs.getDate("date_recrut"),
+                         * rs.getString("name"),
+                         * rs.getString("surname"),
+                         * rs.getInt("age"),
+                         * rs.getString("username"),
+                         * rs.getString("password"));
+                         * System.out.println(n.getName());
+                         * System.out.println(n.getSurname());
+                         * System.out.println(n.getAge());
+                         * System.out.println(n.role);
+                         */
                     }
 
                     switch (rs.getString("role")) {
@@ -195,8 +199,8 @@ public class Login extends JFrame {
                             break;
 
                         case "Nurse":
-                           name=rs.getString("name"); 
-                            role=rs.getString("role"); 
+                            name = rs.getString("name");
+                            role = rs.getString("role");
                             new DashboardNurse(rs.getString("name"), rs.getString("role"), 0);
                             dispose();
                             break;
@@ -281,7 +285,7 @@ public class Login extends JFrame {
         this.add(username);
         this.add(password);
         this.setUndecorated(true);
-        // this.add(lgLab);
+        //this.add(lgLab);
         this.add(_minimise);
         this.add(xExit);
         this.add(bgLab);

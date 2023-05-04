@@ -11,20 +11,27 @@ import javax.swing.event.MouseInputAdapter;
 import BDD.bdd;
 import IHM.FQ;
 import IHM.Login;
+import IHM.dashboard.WaitingRoomClass;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class AddWaitingRoom extends JFrame {
-    
+
     private JLabel patientLabel;
-    private JComboBox<Item> patientField;
+    private JComboBox<WaitingRoomClass> patientField;
 
     private JButton addButton;
     private JButton cancelButton;
+    private JLabel title;
 
     public AddWaitingRoom(JFrame f) {
-        super("Ajouter Patient");
+        title = new JLabel("Remplissement de patient");
+        title.setBounds(150, 50, 300, 50);
+        title.setFont(new Font("monospace", Font.BOLD, 20));
+
+        add(title);
+
         bdd db = new bdd();
         dragFrame move = new dragFrame(this);
 
@@ -33,19 +40,19 @@ public class AddWaitingRoom extends JFrame {
 
         JLabel xExit = new JLabel("X");
         JLabel _minimise = new JLabel("_");
-        ImageIcon backGround = new ImageIcon("./src/IMJ/bg.jpg");
+        ImageIcon backGround = new ImageIcon("./src/IMJ/form2.jpg");
         JLabel bgLab = new JLabel(backGround);
         bgLab.setBounds(0, 0, 800, 550);
         xExit.setFont(new Font("monospace", Font.BOLD, 15));
         xExit.setForeground(Color.black);
         xExit.setBounds(470, 7, 40, 20);
+
         xExit.addMouseListener(new MouseInputAdapter() {
 
             @Override
             public void mousePressed(MouseEvent ev) {
                 dispose();
                 WaitingRoom.addBtn.setEnabled(true);
-                WaitingRoom.editBtn.setEnabled(true);
                 WaitingRoom.deleteBtn.setEnabled(true);
                 WaitingRoom.printBtn.setEnabled(true);
             }
@@ -83,70 +90,50 @@ public class AddWaitingRoom extends JFrame {
         });
 
         patientLabel = new JLabel("Nom de patient");
-        patientLabel.setBounds(50, 100, 150, 30);
+        patientLabel.setBounds(50, 200, 150, 30);
         Object[][] patients = db.getPatientsOnCurrentDay();
 
-        Item[] cbPatient = new Item[patients.length];
+        WaitingRoomClass[] cbPatient = new WaitingRoomClass[patients.length];
         for (int i = 0; i < patients.length; i++) {
             String desc = patients[i][1] + " / " + patients[i][2] + " / " + patients[i][5];
             String id = patients[i][0].toString();
+            String docId = patients[i][8].toString();
 
-            cbPatient[i] = new Item(id, desc);
+            cbPatient[i] = new WaitingRoomClass(id, desc, docId);
 
         }
         patientField = new JComboBox(cbPatient);
-        patientField.setBounds(150, 100, 300, 30);
+        patientField.setBounds(150, 200, 300, 30);
 
         addButton = new JButton("Ajouter");
-        addButton.setBounds(100, 400, 100, 30);
+        addButton.setBounds(200, 300, 100, 30);
         addButton.setForeground(Color.WHITE);
         addButton.setBackground(Color.GREEN);
+
         cancelButton = new JButton("Annuler");
         cancelButton.setBounds(300, 400, 100, 30);
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setBackground(Color.RED);
-
         cancelButton.addActionListener(e -> {
             dispose();
             WaitingRoom.addBtn.setEnabled(true);
-            WaitingRoom.editBtn.setEnabled(true);
             WaitingRoom.deleteBtn.setEnabled(true);
             WaitingRoom.printBtn.setEnabled(true);
         });
         addButton.addActionListener(e -> {
 
-            Item item = (Item) patientField.getSelectedItem();
+            WaitingRoomClass item = (WaitingRoomClass) patientField.getSelectedItem();
             System.out.println(item.getId() + " : " + item.getDescription());
 
-            if(db.InsertWaitingRoom(item.getId())){
-            f.dispose();
+            if (db.InsertWaitingRoom(item.getId(), item.getIdDoc())) {
+                f.dispose();
 
+                dispose();
+                new DashboardNurse(Login.name, Login.role, 0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-            dispose();
-            new DashboardNurse(Login.name, Login.role, 0);
-
-            }
-            else
-            JOptionPane.showMessageDialog(null, "Erreur est survenue lors de l'ajout",
-            "Erreur", JOptionPane.ERROR_MESSAGE);
-            
-         
+            } else
+                JOptionPane.showMessageDialog(null, "Erreur est survenue lors de l'ajout",
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
 
         });
         add(addButton);
@@ -155,10 +142,9 @@ public class AddWaitingRoom extends JFrame {
         add(_minimise);
         add(patientLabel);
         add(patientField);
-
         add(bgLab);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 500);
+        setSize(500, 360);
         setLayout(null);
         setLocationRelativeTo(null);
         setUndecorated(true);
@@ -184,27 +170,5 @@ class dragFrame extends MouseInputAdapter {
     public void mouseDragged(MouseEvent evt) {
         this.frame.setLocation(evt.getXOnScreen() - posX, evt.getYOnScreen() - posY);
 
-    }
-}
-
-class Item {
-    private String id;
-    private String description;
-
-    public Item(String id, String description) {
-        this.id = id;
-        this.description = description;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String toString() {
-        return description;
     }
 }

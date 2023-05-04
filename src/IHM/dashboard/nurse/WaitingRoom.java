@@ -5,6 +5,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -18,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 
 public class WaitingRoom extends JPanel {
     private JLabel title;
@@ -27,6 +30,9 @@ public class WaitingRoom extends JPanel {
     public static JButton editBtn;
     public static JButton deleteBtn;
     public static JButton printBtn;
+    public static JComboBox<String> doctor;
+
+    private Object[][] data;
 
     public static JTable table;
 
@@ -38,6 +44,7 @@ public class WaitingRoom extends JPanel {
     private String sexe = null;
     private String ntel = null;
     private String adresse = null;
+    private String prix = null;
 
     private JTextField searchBar;
     private String search;
@@ -49,12 +56,12 @@ public class WaitingRoom extends JPanel {
         ImageIcon bg = new ImageIcon("./img/bgP.jpg");
         JLabel lab = new JLabel(bg);
         lab.setBounds(0, 0, 1200, 800);
-        
+
         this.F = frame;
         title = new JLabel("Salle D'attente");
         title.setFont(new Font("monospace", Font.BOLD, 25));
         title.setBounds(450, 20, 200, 50);
-       // title.setFont(new Font("ARIAL", Font.BOLD, 20));
+        // title.setFont(new Font("ARIAL", Font.BOLD, 20));
 
         add(title);
 
@@ -65,17 +72,6 @@ public class WaitingRoom extends JPanel {
         addBtn.setBackground(new Color(0X011b45));
         addBtn.setForeground(Color.WHITE);
 
-        addBtn.addActionListener(e -> {
-            new AddWaitingRoom(frame);
-            addBtn.setEnabled(false);
-            editBtn.setEnabled(false);
-            deleteBtn.setEnabled(false);
-            printBtn.setEnabled(false);
-
-        });
-
-        
-
         deleteBtn = new JButton("Supprimer");
         deleteBtn.setBounds(1000, 200, 150, 70);
         deleteBtn.setFont(new Font("Arial", Font.BOLD, 20));
@@ -83,22 +79,25 @@ public class WaitingRoom extends JPanel {
         deleteBtn.setForeground(Color.WHITE);
         deleteBtn.setFocusable(false);
         deleteBtn.addActionListener(e -> {
-            if(id != null){
-                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment le patient n=°" + patient, "Confirmer", JOptionPane.YES_NO_OPTION);
-            if(choice == JOptionPane.YES_OPTION){
-                if(db.deleteWaitingRoom(id)){
-                    JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success", JOptionPane.PLAIN_MESSAGE, new ImageIcon("./img/logo.jpg"));
-                    frame.dispose();
-                    new DashboardNurse(Login.name, Login.role, 0);
-                }
-                    
-                else
-                    JOptionPane.showMessageDialog(null, "Erreur lors du suppression", "Erreur", JOptionPane.ERROR_MESSAGE);
+            if (id != null) {
+                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimé le patient n=°" + id,
+                        "Confirmer", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    if (db.deleteWaitingRoom(id)) {
+                        JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success",
+                                JOptionPane.PLAIN_MESSAGE, new ImageIcon("./img/logo.jpg"));
+                        frame.dispose();
+                        new DashboardNurse(Login.name, Login.role, 0);
+                    }
 
-            }
-            }
-            else
-                JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
+                    else
+                        JOptionPane.showMessageDialog(null, "Erreur lors du suppression", "Erreur",
+                                JOptionPane.ERROR_MESSAGE);
+
+                }
+            } else
+                JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque",
+                        JOptionPane.INFORMATION_MESSAGE);
 
         });
 
@@ -108,15 +107,32 @@ public class WaitingRoom extends JPanel {
         printBtn.setBackground(Color.BLACK);
         printBtn.setForeground(Color.WHITE);
         printBtn.setFocusable(false);
-        
+
+        String[] doctorName = db.getDoctorName();
+        doctor = new JComboBox<String>(doctorName);
+        doctor.setRenderer(new CenteredRenderer());
+
+        doctor.setBounds(1000, 400, 150, 70);
+        doctor.setFont(new Font("Arial", Font.BOLD, 20));
+
+        addBtn.addActionListener(e -> {
+
+            new AddWaitingRoom(frame);
+            addBtn.setEnabled(false);
+            deleteBtn.setEnabled(false);
+            printBtn.setEnabled(false);
+
+        });
+
         tabPanel = new JPanel();
         tabPanel.setLayout(null);
-        tabPanel.setBounds(20, 70, 900, 650);
+        tabPanel.setBounds(20, 70, 900, 640);
 
-        String header[] = { "Patient", "Nom", "Prénom", "Age", "Sexe", "N=°Telephone", "Adresse"};
-        Object[][] data = db.getWaitingRoom();
+        String header[] = { "Nom", "Prénom", "Age", "Sexe", "N=°Telephone", "Adresse", "Prix a payer" };
+        String defaultId = db.getDoctorId((String) doctor.getSelectedItem());
+        data = db.getWaitingRoomById(defaultId);
 
-        TableModel model = new DefaultTableModel(data, header);
+        DefaultTableModel model = new DefaultTableModel(data, header);
         TableRowSorter sorter = new TableRowSorter<>(model);
 
         table = new JTable(model) {
@@ -126,35 +142,41 @@ public class WaitingRoom extends JPanel {
         };
         table.setRowSorter(sorter);
 
+        doctor.addActionListener(e -> {
+            id = null;
+            String id = db.getDoctorId((String) doctor.getSelectedItem());
+            System.out.println(id);
+            Object[][] datatmp = db.getWaitingRoomById(id);
+            data = datatmp;
+            model.setRowCount(0);
+            for (int i = 0; i < datatmp.length; i++) {
+                model.addRow(datatmp[i]);
+                System.out.println(Arrays.toString(datatmp[i]));
+            }
+            model.fireTableDataChanged();
+
+        });
+
         table.setFocusable(false);
         table.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent me) {
                 // to detect doble click events
-                    JTable target = (JTable) me.getSource();
-                    // int row = target.getSelectedRow(); // select a row
-                    // int column = target.getSelectedColumn(); // select a column
-                    // JOptionPane.showMessageDialog(null, data[target.getSelectedRow()][4]); // get
-                    // the value of a row and column.
-                    
-                    id = data[target.getSelectedRow()][7].toString();
-                    patient = data[target.getSelectedRow()][0].toString();
-                    nom = data[target.getSelectedRow()][1].toString();
-                    prenom = data[target.getSelectedRow()][2].toString();
-                    age = data[target.getSelectedRow()][3].toString();
-                    sexe = data[target.getSelectedRow()][4].toString();
-                    ntel = data[target.getSelectedRow()][5].toString();
-                    adresse = data[target.getSelectedRow()][6].toString();
-                    
-                    
-
-                    
-
-                    System.out.println(id);
-
-                
-
+                JTable target = (JTable) me.getSource();
+                // int row = target.getSelectedRow(); // select a row
+                // int column = target.getSelectedColumn(); // select a column
+                // JOptionPane.showMessageDialog(null, data[target.getSelectedRow()][4]); // get
+                // the value of a row and column.
+                id = data[target.getSelectedRow()][7].toString();
+                nom = data[target.getSelectedRow()][0].toString();
+                prenom = data[target.getSelectedRow()][1].toString();
+                age = data[target.getSelectedRow()][2].toString();
+                sexe = data[target.getSelectedRow()][3].toString();
+                ntel = data[target.getSelectedRow()][4].toString();
+                adresse = data[target.getSelectedRow()][5].toString();
+                prix = data[target.getSelectedRow()][6].toString();
+                System.out.println(id);
             }
 
             @Override
@@ -200,18 +222,18 @@ public class WaitingRoom extends JPanel {
         columnModel.getColumn(5).setMaxWidth(128);
         columnModel.getColumn(6).setPreferredWidth(128);
         columnModel.getColumn(6).setMaxWidth(128);
-        
 
         JScrollPane sp = new JScrollPane(table);
         sp.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        sp.setBounds(0, 0, 900, 650);
+        sp.setBounds(0, 0, 900, 640);
 
         tabPanel.add(sp);
         add(tabPanel);
         add(deleteBtn);
         add(addBtn);
         add(printBtn);
-      
+        add(doctor);
+
         // printBtn.addActionListener(new ActionListener(){
 
         // @Override
@@ -320,5 +342,14 @@ class dragFrame extends MouseInputAdapter {
     public void mouseDragged(MouseEvent evt) {
         this.frame.setLocation(evt.getXOnScreen() - posX, evt.getYOnScreen() - posY);
 
+    }
+}
+
+class CenteredRenderer extends DefaultListCellRenderer {
+    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+            boolean cellHasFocus) {
+        Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        setHorizontalAlignment(CENTER);
+        return c;
     }
 }
