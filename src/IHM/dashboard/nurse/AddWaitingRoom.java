@@ -129,7 +129,7 @@ public class AddWaitingRoom extends JFrame {
                 f.dispose();
 
                 dispose();
-                new DashboardNurse(Login.name, Login.role, 0);
+                new DashboardNurse(Login.id, Login.name, Login.role, Login.age, Login.username, Login.password, Login.role, 0);
 
             } else
                 JOptionPane.showMessageDialog(null, "Erreur est survenue lors de l'ajout",

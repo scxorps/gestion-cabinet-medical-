@@ -107,7 +107,7 @@ public class Patients extends JPanel {
                         JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success",
                                 JOptionPane.PLAIN_MESSAGE, new ImageIcon("./img/logo.jpg"));
                         frame.dispose();
-                        new DashboardNurse(Login.name, Login.role, 1);
+                        new DashboardNurse(Login.id, Login.name, Login.role, Login.age, Login.username, Login.password, Login.role, 1);
                     }
 
                     else

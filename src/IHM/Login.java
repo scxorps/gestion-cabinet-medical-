@@ -38,7 +38,13 @@ public class Login extends JFrame {
     bdd b;
     Doctor d = null;
     Nurse n = null;
+
+    public static String id = null;
     public static String name = null;
+    public static String surname = null;
+    public static String username = null;
+    public static String password = null;
+    public static String age = null;
     public static String role = null;
 
     public static Color cabCol = new Color(0x1D4D99);
@@ -78,7 +84,7 @@ public class Login extends JFrame {
             }
         });
 
-        JTextField username = new JTextField() {
+        JTextField usernameField = new JTextField() {
 
             private final String placeholder = "Nom D'utilisateur";
             private final Color placeholdercolor = new Color(0xC2C2C2);
@@ -106,12 +112,12 @@ public class Login extends JFrame {
 
         };
 
-        username.setFont(new Font("monospace", Font.BOLD, 17));
-        username.setBounds(340, 210, 300, 50);
-        username.setBorder(new EmptyBorder(0, 19, 0, 0));
-        username.setForeground(Color.gray);
+        usernameField.setFont(new Font("monospace", Font.BOLD, 17));
+        usernameField.setBounds(340, 210, 300, 50);
+        usernameField.setBorder(new EmptyBorder(0, 19, 0, 0));
+        usernameField.setForeground(Color.gray);
 
-        JPasswordField password = new JPasswordField() {
+        JPasswordField passwordField = new JPasswordField() {
 
             private final String placeholder = "Mot de passe";
             private final Color placeholdercolor = new Color(0xC2C2C2);
@@ -138,10 +144,10 @@ public class Login extends JFrame {
             }
 
         };
-        password.setFont(new Font("monospace", Font.BOLD, 17));
-        password.setBounds(340, 270, 300, 50);
-        password.setBorder(new EmptyBorder(0, 19, 0, 0));
-        password.setForeground(Color.gray);
+        passwordField.setFont(new Font("monospace", Font.BOLD, 17));
+        passwordField.setBounds(340, 270, 300, 50);
+        passwordField.setBorder(new EmptyBorder(0, 19, 0, 0));
+        passwordField.setForeground(Color.gray);
 
         ImageIcon userIcon = new ImageIcon("./src/IMJ/user.png");
         JButton create = new JButton(userIcon);
@@ -158,7 +164,7 @@ public class Login extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 try {
 
-                    ResultSet rs = b.authentification(username.getText(), password.getText());
+                    ResultSet rs = b.authentification(usernameField.getText(), passwordField.getText());
 
                     if ("Doctor".equals(rs.getString("Role"))) {
                         d = new Doctor(
@@ -184,8 +190,8 @@ public class Login extends JFrame {
                          * rs.getString("name"),
                          * rs.getString("surname"),
                          * rs.getInt("age"),
-                         * rs.getString("username"),
-                         * rs.getString("password"));
+                         * rs.getString("usernameField"),
+                         * rs.getString("passwordField"));
                          * System.out.println(n.getName());
                          * System.out.println(n.getSurname());
                          * System.out.println(n.getAge());
@@ -199,9 +205,15 @@ public class Login extends JFrame {
                             break;
 
                         case "Nurse":
+                            id = rs.getString("id");
                             name = rs.getString("name");
+                            surname = rs.getString("surname");
+                            age = rs.getString("age");
+                            username = rs.getString("username");
+                            password = rs.getString("password");
                             role = rs.getString("role");
-                            new DashboardNurse(rs.getString("name"), rs.getString("role"), 0);
+                            System.out.println(name + " " + surname + " " + age + " " + " " + username + " " + password + " " + role );
+                            new DashboardNurse(id, name, surname, age, username, password,  role, 0);
                             dispose();
                             break;
 
@@ -241,32 +253,32 @@ public class Login extends JFrame {
         JLabel XExit = new JLabel("X");
         JLabel reduire = new JLabel("_");
 
-        username.addMouseListener(new MouseAdapter() {
+        usernameField.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (Objects.equals(username.getText(), "Username")) {
-                    username.setText("");
-                    username.setForeground(Color.BLACK);
-                    username.setBorder(new EmptyBorder(12, 20, 11, 0));
-                    username.getCaret().setVisible(true);
+                if (Objects.equals(usernameField.getText(), "Username")) {
+                    usernameField.setText("");
+                    usernameField.setForeground(Color.BLACK);
+                    usernameField.setBorder(new EmptyBorder(12, 20, 11, 0));
+                    usernameField.getCaret().setVisible(true);
                 }
             }
 
         });
-        password.addMouseListener(new MouseAdapter() {
+        passwordField.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (Objects.equals(password.getText(), "Password")) {
-                    password.setText("");
-                    password.setForeground(Color.BLACK);
-                    password.setBorder(new EmptyBorder(12, 20, 11, 0));
-                    password.getCaret().setVisible(true);
+                if (Objects.equals(passwordField.getText(), "PasswordField")) {
+                    passwordField.setText("");
+                    passwordField.setForeground(Color.BLACK);
+                    passwordField.setBorder(new EmptyBorder(12, 20, 11, 0));
+                    passwordField.getCaret().setVisible(true);
                 }
             }
 
         });
 
-        username.addKeyListener(new KeyAdapter() {
+        usernameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
@@ -282,8 +294,8 @@ public class Login extends JFrame {
         });
 
         this.add(create);
-        this.add(username);
-        this.add(password);
+        this.add(usernameField);
+        this.add(passwordField);
         this.setUndecorated(true);
         //this.add(lgLab);
         this.add(_minimise);

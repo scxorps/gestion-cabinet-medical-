@@ -286,7 +286,7 @@ public class EditPatient extends JFrame {
                             new ImageIcon("./img/logo.jpg"));
                     dispose();
                     f.dispose();
-                    new DashboardNurse(Login.name, Login.role, 1);
+                    new DashboardNurse(Login.id, Login.name, Login.role, Login.age, Login.username, Login.password, Login.role, 1);
                 } else {
                     JOptionPane.showMessageDialog(null, "Erreur lors de modification", "Erreur",
                             JOptionPane.ERROR_MESSAGE);

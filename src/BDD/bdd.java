@@ -464,4 +464,17 @@ public Object[][] getUsers() {
             return false;
         }
     }
+    public boolean updateUserInformtion(String id, String nom, String prenom, String username, String password, String age) {
+        String query = "UPDATE user SET name = '" + nom + "', surname = '" + prenom + "', age = " + age
+                + ", username = '" + username + "', password = '" + password + "' WHERE id = " + id;
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

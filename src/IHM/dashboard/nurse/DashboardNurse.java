@@ -22,7 +22,7 @@ public class DashboardNurse extends JFrame {
     private JButton informations;
     private JButton logout;
 
-    public DashboardNurse(String name, String role, int page) {
+    public DashboardNurse(String id, String name, String surname, String age, String username, String password, String role, int page) {
 
         super("Tableau de bord");
         System.out.println(name + " " + role);
@@ -46,7 +46,7 @@ public class DashboardNurse extends JFrame {
 
         JPanel panel3 = new JPanel();
         panel3.setLayout(null);
-        panel3.add(new Informations(this));
+        panel3.add(new Informations(this, id, name, surname, age, username, password));
 
         // Add the panels to the tabbed pane
         tabbedPane.addTab("Tab 1", panel1);
@@ -240,7 +240,7 @@ public class DashboardNurse extends JFrame {
     }
 
     public static void main(String[] args) {
-        new DashboardNurse(Login.name, Login.role, 0);
+        new DashboardNurse(Login.id, Login.name, Login.role, Login.age, Login.username, Login.password, Login.role, 0);
     }
 }
 
