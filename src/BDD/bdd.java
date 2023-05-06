@@ -262,12 +262,12 @@ public class bdd {
 }
 public Object[][] getDoctor() {
 
-    String query = "SELECT * FROM doctor";
+    String query = "SELECT * FROM user WHERE Role=\"Doctor\"";
     // Open a connection
     try {
         int i = 0;
         Statement stmtCount = conn.createStatement();
-        ResultSet rsCount = stmtCount.executeQuery("select count(*) from doctor");
+        ResultSet rsCount = stmtCount.executeQuery("select count(*) from user WHERE Role=\"Doctor\"");
 
         rsCount.next();
 
@@ -278,9 +278,9 @@ public Object[][] getDoctor() {
         // Extract data from result set
         while (rs.next()) {
             // Retrieve by column name
-            doctor[i][0] = rs.getInt("doctor_id");
-            doctor[i][1] = rs.getString("nom");
-            doctor[i][2] = rs.getString("prenom");
+            doctor[i][0] = rs.getInt("id");
+            doctor[i][1] = rs.getString("name");
+            doctor[i][2] = rs.getString("surname");
             
             i++;
         }

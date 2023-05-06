@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DashboardChef",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.Chef.DashboardChef",
+            "projectName": "pfe_db3a1437"
+        },
+        {
+            "type": "java",
             "name": "Login",
             "request": "launch",
             "mainClass": "IHM.Login",
