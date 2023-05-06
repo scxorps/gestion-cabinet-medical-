@@ -31,6 +31,7 @@ import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import BDD.*;
+import IHM.dashboard.Chef.DashboardChef;
 import IHM.dashboard.nurse.DashboardNurse;
 
 public class Login extends JFrame {
@@ -201,10 +202,12 @@ public class Login extends JFrame {
 
                     switch (rs.getString("role")) {
                         case "Doctor":
+
                             JOptionPane.showMessageDialog(null, "Doctor", "state", JOptionPane.PLAIN_MESSAGE);
                             break;
 
                         case "Nurse":
+
                             id = rs.getString("id");
                             name = rs.getString("name");
                             surname = rs.getString("surname");
@@ -212,11 +215,24 @@ public class Login extends JFrame {
                             username = rs.getString("username");
                             password = rs.getString("password");
                             role = rs.getString("role");
-                            System.out.println(name + " " + surname + " " + age + " " + " " + username + " " + password + " " + role );
-                            new DashboardNurse(id, name, surname, age, username, password,  role, 0);
+                            System.out.println(name + " " + surname + " " + age + " " + " " + username + " " + password
+                                    + " " + role);
+                            new DashboardNurse(id, name, surname, age, username, password, role, 0);
                             dispose();
                             break;
+                        case "Chef":
 
+                            id = rs.getString("id");
+                            name = rs.getString("name");
+                            surname = rs.getString("surname");
+                            username = rs.getString("username");
+                            age = rs.getString("age");
+                            password = rs.getString("password");
+                            role = rs.getString("role");
+                            
+                            new DashboardChef(id, name,surname,username,password,age,role, 1);
+                            dispose();
+                            break;
                     }
                 } catch (SQLException er) {
                     System.out.println(er.getMessage());
@@ -297,7 +313,7 @@ public class Login extends JFrame {
         this.add(usernameField);
         this.add(passwordField);
         this.setUndecorated(true);
-        //this.add(lgLab);
+        // this.add(lgLab);
         this.add(_minimise);
         this.add(xExit);
         this.add(bgLab);

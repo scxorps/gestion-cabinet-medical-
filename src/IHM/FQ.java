@@ -12,7 +12,7 @@ public class FQ extends JOptionPane {
 
     public FQ(){
         String[] options = {"Oui", "Non"};
-        int choice = JOptionPane.showOptionDialog(null, "Voulez vous vraiment vous deconnecter?", "Deconnexion",0,
+        int choice = JOptionPane.showOptionDialog(null, "Voulez vous vraiment quitter?", "Deconnexion",0,
         JOptionPane.YES_NO_OPTION, null, options, null);
         if(choice == YES_OPTION)
             System.exit(0);

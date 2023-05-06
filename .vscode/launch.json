@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DashboardNurse",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.nurse.DashboardNurse",
+            "projectName": "pfe_4641a19c"
+        },
+        {
+            "type": "java",
+            "name": "DashboardChef",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.Chef.DashboardChef",
+            "projectName": "pfe_4641a19c"
+        },
+        {
+            "type": "java",
+            "name": "Login",
+            "request": "launch",
+            "mainClass": "IHM.Login",
+            "projectName": "pfe_4641a19c"
+        },
+        {
+            "type": "java",
             "name": "Login",
             "request": "launch",
             "mainClass": "IHM.Login",

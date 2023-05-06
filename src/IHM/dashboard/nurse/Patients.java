@@ -9,11 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import BDD.bdd;
 import IHM.Login;
 import components.CustomRowRenderer;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +47,7 @@ public class Patients extends JPanel {
         bdd db = new bdd();
         setLayout(null);
 
-        ImageIcon bg = new ImageIcon("./img/bgP.jpg");
+       ImageIcon bg = new ImageIcon("./img/bgP.jpg");
         JLabel lab = new JLabel(bg);
         lab.setBounds(0, 0, 1200, 800);
 
@@ -100,7 +98,7 @@ public class Patients extends JPanel {
         deleteBtn.setFocusable(false);
         deleteBtn.addActionListener(e -> {
             if (id != null) {
-                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment le patient n=°" + id,
+                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer le patient n=°" + id,
                         "Confirmer", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
                     if (db.deletePatient(id)) {

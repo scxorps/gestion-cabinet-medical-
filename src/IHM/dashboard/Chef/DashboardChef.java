@@ -4,53 +4,47 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
-
 import IHM.FQ;
 import IHM.Login;
-
 import java.awt.*;
-
 import java.awt.event.MouseEvent;
-
 import java.io.IOException;
 
 
 public class DashboardChef extends JFrame {
 
     private JButton Acceuil;
-   // private JButton finance;
-    //private JButton informations;
+    private JButton informations;
+    private JButton finance;
     private JButton logout;
 
-    public DashboardChef(String name, String role, int page) {
+    public DashboardChef(String name, String role,String surname,String id,String age,String username,String password, int page) {
 
         super("Utilisateur");
         System.out.println(name + " " + role);
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        //dragFrame move = new dragFrame(this);
+        dragFrame move = new dragFrame(this);
 
-        //this.addMouseListener(move);
-        //this.addMouseMotionListener(move);
+        this.addMouseListener(move);
+        this.addMouseMotionListener(move);
         
         JPanel panel1 = new JPanel();
-        panel1.setLayout(null
-        );
+        panel1.setLayout(null);
         panel1.add(new Users(this));
 
        
-        // JPanel panel2 = new JPanel();
-        // panel2.setLayout(null);
-        // panel2.add(new finance(this));
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(null);
+        panel2.add(new finance(this));
 
-
-        // JPanel panel3 = new JPanel();
-        // panel3.setLayout(null);
-        // panel3.add(new Informations(this));
-
+         JPanel panel3 = new JPanel();
+         panel3.setLayout(null);
+         panel3.add(new informations(this, id, name, surname, age, username, password));
         // Add the panels to the tabbed pane
         tabbedPane.addTab("Tab 1", panel1);
-        
+        tabbedPane.addTab("Tab 2", panel2);
+        tabbedPane.addTab("Tab 3", panel3); 
         tabbedPane.setBounds(200, -25, 1200, 800);
         ImageIcon logo = new ImageIcon("./src/IMJ/Logo.png");
         JLabel lgLab = new JLabel(logo);
@@ -111,7 +105,7 @@ public class DashboardChef extends JFrame {
         this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         this.Acceuil.setFont(new Font("Arial", Font.BOLD, 16));
 
-       /*  this.Acceuil.addActionListener(e -> {
+        this.Acceuil.addActionListener(e -> {
             tabbedPane.setSelectedIndex(0);
             this.Acceuil.setBackground(new Color(0X011b45));
             this.finance.setBackground(new Color(0x07337a));
@@ -121,7 +115,7 @@ public class DashboardChef extends JFrame {
             this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         });
         
-        this.finance = new JButton("finances");
+        this.finance = new JButton("finance");
         this.finance.setBounds(0, 260, 200, 60);
         this.finance.setForeground(Color.WHITE);
         this.finance.setFocusable(false);
@@ -159,7 +153,7 @@ public class DashboardChef extends JFrame {
             this.Acceuil.setBorder(null);
             this.informations.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         });
-*/
+
         this.logout = new JButton("Deconnexion");
         this.logout.setBounds(0, 710, 200, 60);
         this.logout.setBackground(Color.RED);
@@ -181,7 +175,7 @@ public class DashboardChef extends JFrame {
         });
 
 
-/*switch(page){
+        switch(page){
             case 0: {
             tabbedPane.setSelectedIndex(0);
             this.Acceuil.setBackground(new Color(0X011b45));
@@ -213,7 +207,7 @@ public class DashboardChef extends JFrame {
             break;
             }
         }
-*/
+
         JPanel p = new JPanel();
         p.setBounds(0, 0, 200, 900);
         p.setLayout(null);
@@ -228,9 +222,9 @@ public class DashboardChef extends JFrame {
 
         
         //this.add(lgLab);
-        //p.add(this.finance);
+        p.add(this.informations);
         p.add(this.Acceuil);
-        //p.add(this.informations);
+        p.add(this.finance);
         p.add(this.logout);
         add(p);
         add(tabbedPane);
@@ -238,6 +232,26 @@ public class DashboardChef extends JFrame {
     }
 
     public static void main(String[] args) {
-        new DashboardChef(Login.name, Login.role, 0);
+        new DashboardChef(Login.name, Login.role, Login.surname, Login.id, Login.age, Login.username, Login.password, 0);
+                      
+    }
+}
+class dragFrame extends MouseInputAdapter {
+
+    private int posX, posY;
+    private final JFrame frame;
+
+    dragFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public void mousePressed(MouseEvent e) {
+        posX = e.getX();
+        posY = e.getY();
+    }
+
+    public void mouseDragged(MouseEvent evt) {
+        this.frame.setLocation(evt.getXOnScreen() - posX, evt.getYOnScreen() - posY);
+
     }
 }
