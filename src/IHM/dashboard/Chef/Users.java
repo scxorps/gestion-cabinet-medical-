@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import BDD.bdd;
 import IHM.Login;
 import IHM.dashboard.Chef.*;
@@ -88,7 +87,7 @@ public class Users extends JPanel {
                         JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success",
                                 JOptionPane.PLAIN_MESSAGE, new ImageIcon("./img/logo.jpg"));
                         frame.dispose();
-                        new DashboardChef(Login.name, Login.role, 0);
+                        new DashboardChef(Login.name, Login.role,Login.surname,Login.id,Login.age,Login.username,Login.password, 0);
                     }
 
                     else

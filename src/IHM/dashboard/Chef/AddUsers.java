@@ -256,7 +256,7 @@ public class AddUsers extends JFrame {
                             new ImageIcon("./img/logo.jpg"));
                     dispose();
                     f.dispose();
-                    new DashboardChef(Login.name, Login.role, 1);
+                    new DashboardChef(Login.name, Login.role,Login.surname,Login.id,Login.age,Login.username,Login.password, 0);
                 } else {
                     JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }

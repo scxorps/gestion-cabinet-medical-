@@ -4,14 +4,10 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.MouseInputAdapter;
-
 import IHM.FQ;
 import IHM.Login;
-
 import java.awt.*;
-
 import java.awt.event.MouseEvent;
-
 import java.io.IOException;
 
 
@@ -34,8 +30,7 @@ public class DashboardNurse extends JFrame {
         this.addMouseMotionListener(move);
         
         JPanel panel1 = new JPanel();
-        panel1.setLayout(null
-        );
+        panel1.setLayout(null);
         panel1.add(new WaitingRoom(this));
 
        
@@ -43,11 +38,9 @@ public class DashboardNurse extends JFrame {
         panel2.setLayout(null);
         panel2.add(new Patients(this));
 
-
         JPanel panel3 = new JPanel();
         panel3.setLayout(null);
         panel3.add(new Informations(this, id, name, surname, age, username, password));
-
         // Add the panels to the tabbed pane
         tabbedPane.addTab("Tab 1", panel1);
         tabbedPane.addTab("Tab 2", panel2);
