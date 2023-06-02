@@ -42,7 +42,7 @@ public class bdd {
 
     public Object[][] getPatients() {
 
-        String query = "SELECT * FROM patient P, doctor D where P.doctor_id = D.doctor_id";
+        String query = "SELECT * FROM patient P, user U where P.doctor_id = U.id";
         // Open a connection
         try {
             int i = 0;
@@ -66,7 +66,7 @@ public class bdd {
                 patient[i][5] = rs.getString("n_tel");
                 patient[i][6] = rs.getString("adresse");
                 patient[i][7] = rs.getDate("date_r");
-                patient[i][8] = rs.getString("nom");
+                patient[i][8] = rs.getString("name");
 
                 i++;
             }
@@ -293,7 +293,7 @@ public Object[][] getDoctor() {
 }
 public String[] getSingleDoctor(String name) {
 
-    String query = "SELECT * FROM doctor where nom='" + name +"'";
+    String query = "SELECT * FROM user where name='" + name +"'";
     // Open a connection
     try {
 
@@ -304,9 +304,9 @@ public String[] getSingleDoctor(String name) {
         // Extract data from result set
         while (rs.next()) {
             // Retrieve by column name
-            doctor[0] = rs.getString("doctor_id");
-            doctor[1] = rs.getString("nom");
-            doctor[2] = rs.getString("prenom");
+            doctor[0] = rs.getString("id");
+            doctor[1] = rs.getString("name");
+            doctor[2] = rs.getString("surname");
           
         }
         return doctor;

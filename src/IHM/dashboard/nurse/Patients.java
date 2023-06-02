@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.print.PrinterException;
+import java.text.MessageFormat;
 
 public class Patients extends JPanel {
     private JLabel title;
@@ -145,7 +147,7 @@ public class Patients extends JPanel {
         table.setRowSorter(sorter);
 
         CustomRowRenderer rowRenderer = new CustomRowRenderer();
-        table.getColumnModel().getColumn(7).setCellRenderer(rowRenderer);        
+        table.getColumnModel().getColumn(7).setCellRenderer(rowRenderer);
         table.setFocusable(false);
         table.addMouseListener(new MouseListener() {
 
@@ -261,22 +263,22 @@ public class Patients extends JPanel {
         add(editBtn);
         add(printBtn);
 
-        // printBtn.addActionListener(new ActionListener(){
+        printBtn.addActionListener(new ActionListener(){
 
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // // TODO Auto-generated method stub
-        // MessageFormat header = new MessageFormat("Produit");
-        // MessageFormat footer = new MessageFormat("Page{0,number,integer}");
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        MessageFormat header = new MessageFormat("Produit");
+        MessageFormat footer = new MessageFormat("Page{0,number,integer}");
 
-        // try {
-        // table.print(JTable.PrintMode.FIT_WIDTH, header, footer);
-        // } catch (java.awt.print.PrinterAbortException err) {
-        // } catch (PrinterException ex) {
-        // System.out.println(ex.getMessage());
-        // }
-        // }
-        // });
+        try {
+        table.print(JTable.PrintMode.FIT_WIDTH, header, footer);
+        } catch (java.awt.print.PrinterAbortException err) {
+        } catch (PrinterException ex) {
+        System.out.println(ex.getMessage());
+        }
+        }
+        });
         searchBar = new JTextField() {
 
             private final String placeholder = "Rechercher patient";
