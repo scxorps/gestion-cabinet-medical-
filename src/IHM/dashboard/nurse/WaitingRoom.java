@@ -7,6 +7,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -206,6 +207,7 @@ public class WaitingRoom extends JPanel {
             }
 
         });
+     
 
         table.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         TableColumnModel columnModel = table.getColumnModel();

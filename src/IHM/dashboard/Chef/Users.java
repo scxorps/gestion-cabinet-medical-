@@ -55,7 +55,7 @@ public class Users extends JPanel {
 
         ImageIcon bg = new ImageIcon("./img/bgP.jpg");
         JLabel lab = new JLabel(bg);
-        lab.setBounds(0, 0, 1200, 800);
+        lab.setBounds(0, 0, 1280, 800);
 
         this.F = frame;
         title = new JLabel("Utilisateur");
@@ -128,7 +128,7 @@ public class Users extends JPanel {
         tabPanel.setLayout(null);
         tabPanel.setBounds(20, 70, 900, 640);
 
-        String header[] = { "Id", "Nom", "Prénom", "Username", "Password", "Age", "Role", "Date de recrutement" };
+        String header[] = { "Id", "Nom", "Prénom", "Username", "Age", "Role", "Date de recrutement" };
         String defaultId = db.getDoctorId((String) doctor.getSelectedItem());
         data = db.getUsers();
 
@@ -202,22 +202,21 @@ public class Users extends JPanel {
         table.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         TableColumnModel columnModel = table.getColumnModel();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        columnModel.getColumn(0).setPreferredWidth(113);
-        columnModel.getColumn(0).setMaxWidth(113);
-        columnModel.getColumn(1).setPreferredWidth(113);
-        columnModel.getColumn(1).setMaxWidth(113);
-        columnModel.getColumn(2).setPreferredWidth(113);
-        columnModel.getColumn(2).setMaxWidth(113);
-        columnModel.getColumn(3).setPreferredWidth(113);
-        columnModel.getColumn(3).setMaxWidth(113);
-        columnModel.getColumn(4).setPreferredWidth(113);
-        columnModel.getColumn(4).setMaxWidth(113);
-        columnModel.getColumn(5).setPreferredWidth(113);
-        columnModel.getColumn(5).setMaxWidth(113);
-        columnModel.getColumn(6).setPreferredWidth(113);
-        columnModel.getColumn(6).setMaxWidth(113);
-        columnModel.getColumn(7).setPreferredWidth(113);
-        columnModel.getColumn(7).setMaxWidth(113);
+        columnModel.getColumn(0).setPreferredWidth(128);
+        columnModel.getColumn(0).setMaxWidth(128);
+        columnModel.getColumn(1).setPreferredWidth(128);
+        columnModel.getColumn(1).setMaxWidth(128);
+        columnModel.getColumn(2).setPreferredWidth(128);
+        columnModel.getColumn(2).setMaxWidth(128);
+        columnModel.getColumn(3).setPreferredWidth(128);
+        columnModel.getColumn(3).setMaxWidth(128);
+        columnModel.getColumn(4).setPreferredWidth(128);
+        columnModel.getColumn(4).setMaxWidth(128);
+        columnModel.getColumn(5).setPreferredWidth(128);
+        columnModel.getColumn(5).setMaxWidth(128);
+        columnModel.getColumn(6).setPreferredWidth(128);
+        columnModel.getColumn(6).setMaxWidth(128);
+        
 
         JScrollPane sp = new JScrollPane(table);
         sp.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
@@ -309,7 +308,7 @@ public class Users extends JPanel {
 
         add(searchBar);
         add(lab);
-        setSize(1200, 800);
+        setSize(1280, 800);
 
         setLayout(null);
 

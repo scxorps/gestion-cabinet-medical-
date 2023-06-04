@@ -4,7 +4,10 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -15,9 +18,12 @@ import components.CustomRowRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.print.PrinterException;
+import java.lang.annotation.Target;
 import java.text.MessageFormat;
 
 public class Patients extends JPanel {
@@ -147,6 +153,8 @@ public class Patients extends JPanel {
         table.setRowSorter(sorter);
 
         CustomRowRenderer rowRenderer = new CustomRowRenderer();
+        
+
         table.getColumnModel().getColumn(7).setCellRenderer(rowRenderer);
         table.setFocusable(false);
         table.addMouseListener(new MouseListener() {
@@ -154,6 +162,7 @@ public class Patients extends JPanel {
             @Override
             public void mouseClicked(MouseEvent me) {
                 // to detect doble click events
+                
                 JTable target = (JTable) me.getSource();
                 // int row = target.getSelectedRow(); // select a row
                 // int column = target.getSelectedColumn(); // select a column
@@ -345,6 +354,17 @@ public class Patients extends JPanel {
 
         setSize(1200, 800);
 
+    }
+    private static class CustomTableHeaderRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            // Set the background color of the table header
+            component.setBackground(Color.GRAY);
+
+            return component;
+        }
     }
 
     public static void main(String[] args) {

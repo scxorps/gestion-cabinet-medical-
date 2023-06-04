@@ -18,7 +18,8 @@ public class DashboardChef extends JFrame {
     private JButton finance;
     private JButton logout;
 
-    public DashboardChef(String name, String role,String surname,String id,String age,String username,String password, int page) {
+    public DashboardChef(String id, String name, String surname, String password , String username, String age,
+    String role, int page) {
 
         super("Utilisateur");
         System.out.println(name + " " + role);

@@ -411,7 +411,7 @@ public Object[][] getUsers() {
 
         rsCount.next();
 
-        Object patient[][] = new Object[rsCount.getInt(1)][8];
+        Object patient[][] = new Object[rsCount.getInt(1)][7];
 
         stmt = conn.createStatement();
         rs = stmt.executeQuery(query);
@@ -422,10 +422,9 @@ public Object[][] getUsers() {
             patient[i][1] = rs.getString("name");
             patient[i][2] = rs.getString("surname");
             patient[i][3] = rs.getString("username");
-            patient[i][4] = rs.getString("password");
-            patient[i][5] = rs.getString("age");
-            patient[i][6] = rs.getString("Role");
-            patient[i][7] = rs.getString("date_recrut");
+            patient[i][4] = rs.getString("age");
+            patient[i][5] = rs.getString("Role");
+            patient[i][6] = rs.getString("date_recrut");
 
             i++;
         }
@@ -476,5 +475,56 @@ public Object[][] getUsers() {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isSecurityQuestionSet(String id){
+        String query = "SELECT count(*) FROM 2fa WHERE id = " + id;
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            rs.next();
+            if(rs.getInt(1) == 0){
+                return false;
+            }else{
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+    public boolean InsertQA(String id, String question, String answer){
+        String query = "INSERT INTO 2fa (id, question, answer) VALUES (" + id + ", '" + question + "', '" + answer + "')";
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Object[] getInformationByUsername(String username){
+        String query = "SELECT * FROM user U, 2fa F WHERE U.id = F.id AND U.username = '" + username + "'";
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            rs.next();
+            Object[] information = new Object[6];
+            information[0] = rs.getString("name");
+            information[1] = rs.getString("surname");
+            information[2] = rs.getString("username");
+            information[3] = rs.getString("password");
+
+            information[4] = rs.getString("question");
+            information[5] = rs.getString("answer");
+            return information;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
     }
 }
