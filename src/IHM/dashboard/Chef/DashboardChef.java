@@ -47,9 +47,7 @@ public class DashboardChef extends JFrame {
         tabbedPane.addTab("Tab 2", panel2);
         tabbedPane.addTab("Tab 3", panel3); 
         tabbedPane.setBounds(200, -25, 1200, 800);
-        ImageIcon logo = new ImageIcon("./src/IMJ/Logo.png");
-        JLabel lgLab = new JLabel(logo);
-        lgLab.setBounds(50,50,100, 68);
+       
         JLabel xExit = new JLabel("X");
         JLabel _minimise = new JLabel("_");
         xExit.setFont(new Font("monospace", Font.BOLD, 15));
@@ -209,6 +207,12 @@ public class DashboardChef extends JFrame {
             }
         }
 
+         ImageIcon logo2 = new ImageIcon("./src/IMJ/logo1.png");
+        JLabel lglab2 = new JLabel(logo2);
+
+        lglab2.setBounds(0, 0, 200, 200);
+        add(lglab2);
+
         JPanel p = new JPanel();
         p.setBounds(0, 0, 200, 900);
         p.setLayout(null);
@@ -220,9 +224,6 @@ public class DashboardChef extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-
-        
-        //this.add(lgLab);
         p.add(this.informations);
         p.add(this.Acceuil);
         p.add(this.finance);
@@ -234,7 +235,7 @@ public class DashboardChef extends JFrame {
 
     public static void main(String[] args) {
         new DashboardChef(Login.name, Login.role, Login.surname, Login.id, Login.age, Login.username, Login.password, 0);
-                      
+                
     }
 }
 class dragFrame extends MouseInputAdapter {

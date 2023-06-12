@@ -50,10 +50,11 @@ public class Patients extends JPanel {
     private JTextField searchBar;
     private String search;
     public static JFrame F;
-
+    
     public Patients(JFrame frame) {
         bdd db = new bdd();
         setLayout(null);
+        Object[][] data = db.getPatients();
 
        ImageIcon bg = new ImageIcon("./img/bgP.jpg");
         JLabel lab = new JLabel(bg);
@@ -75,7 +76,7 @@ public class Patients extends JPanel {
         addBtn.setForeground(Color.WHITE);
 
         addBtn.addActionListener(e -> {
-            new AddPatient(frame);
+            new AddPatient(frame, data);
             addBtn.setEnabled(false);
             editBtn.setEnabled(false);
             deleteBtn.setEnabled(false);
@@ -140,7 +141,6 @@ public class Patients extends JPanel {
 
         String header[] = { "N=°Patient", "Nom", "Prénom", "Age", "Sexe", "N=°Telephone", "Adresse", "Dernier RDV",
                 "Docteur" };
-        Object[][] data = db.getPatients();
 
         TableModel model = new DefaultTableModel(data, header);
         TableRowSorter sorter = new TableRowSorter<>(model);

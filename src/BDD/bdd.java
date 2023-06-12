@@ -2,6 +2,8 @@ package BDD;
 
 import java.sql.*;
 
+import javax.swing.event.InternalFrameAdapter;
+
 import com.mysql.jdbc.util.ResultSetUtil;
 
 public class bdd {
@@ -511,20 +513,194 @@ public Object[][] getUsers() {
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
-            rs.next();
-            Object[] information = new Object[6];
-            information[0] = rs.getString("name");
-            information[1] = rs.getString("surname");
-            information[2] = rs.getString("username");
-            information[3] = rs.getString("password");
+            Object[] information;
 
-            information[4] = rs.getString("question");
-            information[5] = rs.getString("answer");
-            return information;
+            String queryCount = "SELECT COUNT(*) FROM user U, 2fa F WHERE U.id = F.id AND U.username = '" + username + "'";
+            Statement stmt2 = conn.createStatement();
+            ResultSet rs2 = stmt2.executeQuery(queryCount);
+
+            rs2.next();
+            if(Integer.parseInt(rs2.getString("COUNT(*)")) == 0){
+                information = new Object[1];
+                information[0] = "none";
+
+                return information;
+            }
+
+            else{
+                information = new Object[6];
+                rs.next();
+                information[0] = rs.getString("name");
+                information[1] = rs.getString("surname");
+                information[2] = rs.getString("username");
+                information[3] = rs.getString("password");
+    
+                information[4] = rs.getString("question");
+                information[5] = rs.getString("answer");
+                return information;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
         
     }
+
+
+ public Object[][] getMédicament(){
+    String query = "SELECT * FROM medicament";
+    String queryn = "SELECT COUNT(*) FROM medicament"; 
+    try {
+        int i = 0;
+        Statement stmtCount = conn.createStatement();
+        ResultSet rsCount = stmtCount.executeQuery(queryn);
+
+        rsCount.next();
+        //System.out.println("données sql: \t" + rsCount.getInt(1));
+        Object trait[][] = new Object[rsCount.getInt(1)][2];
+
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        //System.out.println("données sql: \t" + rs.getInt("N°"));
+        // Extract data from result set
+        while (rs.next()) {
+            // Retrieve by column name
+           
+            trait[i][0] = rs.getString("N");
+            trait[i][1] = rs.getString("Nom");
+
+            i++;
+        }
+        return trait;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+public int getPatientId(String name){
+    String query = "SELECT * FROM patient WHERE nom_p='" + name + "'";
+    // Open a connection
+    try {
+ 
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        rs.next();
+
+        return rs.getInt("n_patient");
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+
+public boolean InsertCons(int num, String anc, String cons, String ord, String prix) {
+        String query = "INSERT INTO consultation (n_patient, anc_maladie, notes_cons, ordonnance, prix) VALUES ('" + num
+                + "', '" + anc + "', '" + cons + "', '" + ord + "', '" + prix + "')";
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    public boolean UpdateCons(int num, String anc, String cons, String ord, String prix) {
+        String query = "UPDATE consultation SET anc_maladie = '"+ anc + "', notes_cons = '"+ cons +"', ordonnance = '"+ ord + "', prix = '" + prix + "'WHERE n_patient = "+ num;
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+public String getAnc(int num){
+    String query = "SELECT anc_maladie FROM consultation WHERE n_patient = '"+ num +"'";
+    try {
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        rs.next();
+        String anc = rs.getString("anc_maladie");
+
+        return anc;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+public String getntCons(int num){
+    String query = "SELECT notes_cons FROM consultation WHERE n_patient = '"+ num +"'";
+    try {
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        rs.next();
+        String nt = rs.getString("notes_cons");
+
+        return nt;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+public String getOrd(int num){
+    String query = "SELECT ordonnance FROM consultation WHERE n_patient = '"+ num +"'";
+    try {
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        rs.next();
+        String ord = rs.getString("ordonnance");
+
+        return ord;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+public int getPrix(int num){
+    String query = "SELECT prix FROM consultation WHERE n_patient = '"+ num +"'";
+    try {
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        rs.next();
+        int pr = rs.getInt("prix");
+
+        return pr;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+public int getTotPrix(){
+    String query = "SELECT prix FROM consultation";
+    try {
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery(query);
+        int p = 0;
+        while (rs.next()) {
+            p += rs.getInt("prix");
+        }
+        return p;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+
+}
 }

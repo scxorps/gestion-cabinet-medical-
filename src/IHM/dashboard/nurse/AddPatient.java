@@ -53,7 +53,7 @@ public class AddPatient extends JFrame {
     private JButton addButton;
     private JButton cancelButton;
 
-    public AddPatient(JFrame f) {
+    public AddPatient(JFrame f, Object[][] data) {
         super("Ajouter Patient");
         bdd db = new bdd();
         dragFrame move = new dragFrame(this);
@@ -291,7 +291,9 @@ public class AddPatient extends JFrame {
             if ( isdateEmpty ||isNameEmpty || isSurnameEmpty || isAgeEmpty || isGenderEmpty || isPhoneEmpty || isAdressEmpty || isDoctorEmpty) {
                 JOptionPane.showMessageDialog(null, "Veuillez remplir tout les cases", "Erreur",
                         JOptionPane.ERROR_MESSAGE);
-            } else {
+            }
+            else {
+                boolean duplicated = false;
                 String nom = nomField.getText(),
                         prenom = prenomField.getText(),
                         age = ageField.getText(),
@@ -300,9 +302,18 @@ public class AddPatient extends JFrame {
                         adress = adressField.getText(),
                         dc = doctor.getId();
 
+                        for(int i = 0 ; i < data.length ; i++){
+                            if(nom.equals(data[i][1].toString()) && prenom.equals(data[i][2].toString()) && age.equals(data[i][3].toString()) && gender.equals(data[i][4].toString()))
+                                duplicated = true;
+                        }
+
                         java.util.Date date = (Date) dateField.getModel().getValue();
                         java.sql.Date d = new java.sql.Date(date.getTime());
-                if (db.InsertPatient(nom, prenom, age, gender, phone, adress, d, dc)) {
+                if(duplicated){
+                    JOptionPane.showMessageDialog(null, "Cette personne deja existe !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    if (db.InsertPatient(nom, prenom, age, gender, phone, adress, d, dc)) {
                     JOptionPane.showMessageDialog(null, "Patient est bien ajouté", "Succes", JOptionPane.PLAIN_MESSAGE,
                             new ImageIcon("./img/logo.jpg"));
                     dispose();
@@ -310,6 +321,7 @@ public class AddPatient extends JFrame {
                     new DashboardNurse(Login.id, Login.name, Login.role, Login.age, Login.username, Login.password, Login.role, 1);
                 } else {
                     JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
                 }
             }
 

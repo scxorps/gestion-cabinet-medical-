@@ -6,6 +6,48 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DashboardDoctor",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.doctor.DashboardDoctor",
+            "projectName": "pfe_8ae12296"
+        },
+        {
+            "type": "java",
+            "name": "Users",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.Chef.Users",
+            "projectName": "pfe_8ae12296"
+        },
+        {
+            "type": "java",
+            "name": "DashboardChef",
+            "request": "launch",
+            "mainClass": "IHM.dashboard.Chef.DashboardChef",
+            "projectName": "pfe_8ae12296"
+        },
+        {
+            "type": "java",
+            "name": "Client",
+            "request": "launch",
+            "mainClass": "server.Client",
+            "projectName": "pfe_8ae12296"
+        },
+        {
+            "type": "java",
+            "name": "Server",
+            "request": "launch",
+            "mainClass": "server.Server",
+            "projectName": "pfe_8ae12296"
+        },
+        {
+            "type": "java",
+            "name": "Login",
+            "request": "launch",
+            "mainClass": "IHM.Login",
+            "projectName": "pfe_8ae12296"
+        },
+        {
+            "type": "java",
             "name": "DashboardNurse",
             "request": "launch",
             "mainClass": "IHM.dashboard.nurse.DashboardNurse",

@@ -210,17 +210,17 @@ public class EditPatient extends JFrame {
 
         Item[] cbDoctor = new Item[doctors.length + 1];
         cbDoctor[0] = new Item("999", "Selectionner le docteur");
-        for (int i = 1; i < doctors.length; i++) {
+        for (int i = 0; i < doctors.length; i++) {
             if(doc.getId() == doctors[i][1]){
                 docIndex = i + 1;
             }
             String desc =  doctors[i][1] + " / " + doctors[i][2];
             String ident = doctors[i][0].toString();
 
-            cbDoctor[i] = new Item(ident, desc);
+            cbDoctor[i + 1] = new Item(ident, desc);
 
           
-            if(doc.getId().equals(cbDoctor[i].getId())){
+            if(doc.getId().equals(cbDoctor[i + 1].getId())){
             docIndex = i;
             }
 

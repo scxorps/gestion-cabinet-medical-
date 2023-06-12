@@ -32,6 +32,7 @@ import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 import BDD.*;
 import IHM.dashboard.Chef.DashboardChef;
+import IHM.dashboard.doctor.DashboardDoctor;
 import IHM.dashboard.nurse.DashboardNurse;
 
 public class Login extends JFrame {
@@ -166,8 +167,7 @@ public class Login extends JFrame {
                     SetupSecurity s = new SetupSecurity();
                     s.check(username, b);
                 }
-                   
-                    
+
             }
 
             @Override
@@ -180,8 +180,6 @@ public class Login extends JFrame {
                 forgetPassword.setForeground(Color.gray);
             }
         });
-
-
 
         ImageIcon userIcon = new ImageIcon("./src/IMJ/user.png");
         JButton create = new JButton(userIcon);
@@ -203,9 +201,28 @@ public class Login extends JFrame {
                     switch (rs.getString("role")) {
                         case "Doctor":
 
-                            JOptionPane.showMessageDialog(null, "Doctor", "state", JOptionPane.PLAIN_MESSAGE);
+                            id = rs.getString("id");
+                            name = rs.getString("name");
+                            surname = rs.getString("surname");
+                            age = rs.getString("age");
+                            username = rs.getString("username");
+                            password = rs.getString("password");
+                            role = rs.getString("role");
+                            System.out.println(name + " " + surname + " " + age + " " + " " + username + " " + password
+                                    + " " + role);
+                            if (b.isSecurityQuestionSet(id)) {
+                                new DashboardDoctor(id, name, surname, age, username, password, role, 0);
+                                dispose();
+                                break;
+                            } else {
+                                SetupSecurity s = new SetupSecurity();
+                                if (s.show(id, b)) {
+                                    new DashboardDoctor(id, name, surname, age, username, password, role, 0);
+                                    dispose();
+                                    break;
+                                }
+                            }
                             break;
-
                         case "Nurse":
 
                             id = rs.getString("id");
@@ -217,22 +234,19 @@ public class Login extends JFrame {
                             role = rs.getString("role");
                             System.out.println(name + " " + surname + " " + age + " " + " " + username + " " + password
                                     + " " + role);
-                                    if (b.isSecurityQuestionSet(id)) {
-                                        new DashboardNurse(id, name, surname, age, username, password, role, 0);
-                                        dispose();
-                                        break;
-                                    } else {
-                                        SetupSecurity s = new SetupSecurity();
-                                        if (s.show(id, b)) {
-                                            new DashboardNurse(id, name, surname, age, username, password, role, 0);
-                                            dispose();
-                                            break;
-                                        } else {
-                                            JOptionPane.showMessageDialog(null,
-                                                    "Vous devez configurer votre question de sécurité", "Erreur",
-                                                    JOptionPane.ERROR_MESSAGE);
-                                        }
-                                    }
+                            if (b.isSecurityQuestionSet(id)) {
+                                new DashboardNurse(id, name, surname, age, username, password, role, 0);
+                                dispose();
+                                break;
+                            } else {
+                                SetupSecurity s = new SetupSecurity();
+                                if (s.show(id, b)) {
+                                    new DashboardNurse(id, name, surname, age, username, password, role, 0);
+                                    dispose();
+                                    break;
+                                } 
+                            }
+                            break;
                         case "Chef":
 
                             id = rs.getString("id");
@@ -253,13 +267,9 @@ public class Login extends JFrame {
                                     new DashboardChef(id, name, surname, username, password, age, role, 0);
                                     dispose();
                                     break;
-                                } else {
-                                    JOptionPane.showMessageDialog(null,
-                                            "Vous devez configurer votre question de sécurité", "Erreur",
-                                            JOptionPane.ERROR_MESSAGE);
                                 }
                             }
-
+                         break;   
                     }
                 } catch (SQLException er) {
                     System.out.println(er.getMessage());
@@ -393,43 +403,65 @@ class SetupSecurity extends JOptionPane {
             String question = (String) comboBox.getSelectedItem();
             String answer = textField.getText();
 
-            if (b.InsertQA(id, question, answer)) {
-                return true;
-            } else {
-                JOptionPane.showMessageDialog(null, "Erreur lors de l'insertion de la question de sécurité", "Erreur",
+            if (answer.length() <= 4) {
+                JOptionPane.showMessageDialog(null, "vous devez au moins saisir 4 lettre sur la reponse", "Erreur",
                         JOptionPane.ERROR_MESSAGE);
+                return false;
+            } else {
+                if (b.InsertQA(id, question, answer)) {
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erreur lors de l'insertion de la question de sécurité",
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
+
+        }
+        else{
+            JOptionPane.showMessageDialog(null,
+                                            "Vous devez configurer votre question de sécurité", "Erreur",
+                                            JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }
-    public void check(String username, bdd b){
+
+    public void check(String username, bdd b) {
         JTextField t = new JTextField();
-        
+
         Object[] info = b.getInformationByUsername(username);
         if (info == null) {
             JOptionPane.showMessageDialog(null, "Nom D'utilisateur Incorrecte !", "Erreur",
-            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        } else if (info[0].toString() == "none") {
+            JOptionPane.showMessageDialog(null, "Vous n'avez pas deja priciser les question secrete !", "Erreur",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        
-       
-        JLabel tLabel = new JLabel((String) info[4]);
-        fields = new JPanel(new GridLayout(2, 1));
 
-        fields.add(tLabel);
-        fields.add(t);
-        
-        int option = JOptionPane.showConfirmDialog(null, fields, "Question de sécurité - " + username , JOptionPane.OK_CANCEL_OPTION);
+        else {
+            JLabel tLabel = new JLabel((String) info[4]);
+            fields = new JPanel(new GridLayout(2, 1));
 
-        if (option == JOptionPane.OK_OPTION) {
-            String answer = t.getText();
-            if (answer.equals((String) info[5])) {
-                JOptionPane.showMessageDialog(null, "Votre Mot de passe est ==> " + info[3], "Mot de passe", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Réponse Incorrecte !", "Erreur",
-                        JOptionPane.ERROR_MESSAGE);
+            fields.add(tLabel);
+            fields.add(t);
+
+            int option = JOptionPane.showConfirmDialog(null, fields, "Question de sécurité - " + username,
+                    JOptionPane.OK_CANCEL_OPTION);
+
+            if (option == JOptionPane.OK_OPTION) {
+                String answer = t.getText();
+                if (answer.equals((String) info[5])) {
+                    JOptionPane.showMessageDialog(null, "Votre Mot de passe est ==> " + info[3], "Mot de passe",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Réponse Incorrecte !", "Erreur",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
-        }
 
+        }
     }
 }
 

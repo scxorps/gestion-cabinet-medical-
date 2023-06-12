@@ -68,7 +68,7 @@ public class WaitingRoom extends JPanel {
 
         add(title);
 
-        addBtn = new JButton("Ajouter");
+        addBtn = new JButton("Passer");
         addBtn.setBounds(1000, 100, 150, 70);
         addBtn.setFont(new Font("Arial", Font.BOLD, 20));
         addBtn.setFocusable(false);

@@ -1,4 +1,5 @@
-package IHM.dashboard.Chef;
+package IHM.dashboard.doctor;
+import java.awt.Color;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -11,9 +12,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.sql.ResultSet;
+
 import BDD.bdd;
 import IHM.Login;
-import IHM.dashboard.Chef.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,17 +24,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
 
-public class Users extends JPanel {
+
+public class Conspage extends JPanel {
     private JLabel title;
     private JPanel tabPanel;
 
-    public static JButton addBtn;
+    public static JButton consBtn;
     public static JButton editBtn;
     public static JButton deleteBtn;
     public static JButton printBtn;
     public static JComboBox<String> doctor;
 
     private Object[][] data;
+
 
     public static JTable table;
 
@@ -44,178 +48,188 @@ public class Users extends JPanel {
     private String sexe = null;
     private String ntel = null;
     private String adresse = null;
-    private String prix = null;
 
     private JTextField searchBar;
     private String search;
     public static JFrame F;
-
-    public Users(JFrame frame) {
+    public static String ro;
+    Conspage(JFrame frame,String r,String id1){
         bdd db = new bdd();
 
         ImageIcon bg = new ImageIcon("./img/bgP.jpg");
         JLabel lab = new JLabel(bg);
         lab.setBounds(0, 0, 1200, 800);
-
+        
         this.F = frame;
-        title = new JLabel("Utilisateur");
+        this.ro=r;
+        title = new JLabel("patients a consulter");
         title.setFont(new Font("monospace", Font.BOLD, 25));
-        title.setBounds(450, 20, 200, 50);
-        // title.setFont(new Font("ARIAL", Font.BOLD, 20));
+        title.setBounds(350, 20, 400, 50);
+       // title.setFont(new Font("ARIAL", Font.BOLD, 20));
 
         add(title);
 
-        addBtn = new JButton("Ajouter");
-        addBtn.setBounds(1000, 100, 150, 70);
-        addBtn.setFont(new Font("Arial", Font.BOLD, 20));
-        addBtn.setFocusable(false);
-        addBtn.setBackground(new Color(0X011b45));
-        addBtn.setForeground(Color.WHITE);
+        consBtn = new JButton("Consulter");
+        consBtn.setBounds(1000, 100, 150, 70);
+        consBtn.setFont(new Font("Arial", Font.BOLD, 20));
+        consBtn.setFocusable(false);
+        consBtn.setBackground(new Color(0X011b45));
+        consBtn.setForeground(Color.WHITE);
+
+        editBtn = new JButton("Modifier");
+        editBtn.setBounds(1000, 200, 150, 70);
+        editBtn.setFont(new Font("Arial", Font.BOLD, 20));
+        editBtn.setBackground(new Color(0X011b45));
+        editBtn.setForeground(Color.WHITE);
+        editBtn.setFocusable(false);
+
+        
 
         deleteBtn = new JButton("Supprimer");
-        deleteBtn.setBounds(1000, 200, 150, 70);
+        deleteBtn.setBounds(1000, 300, 150, 70);
         deleteBtn.setFont(new Font("Arial", Font.BOLD, 20));
         deleteBtn.setBackground(new Color(0X011b45));
         deleteBtn.setForeground(Color.WHITE);
         deleteBtn.setFocusable(false);
         deleteBtn.addActionListener(e -> {
-            if (id != null) {
-                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimé le utilisateur n=°" + id,
-                        "Confirmer", JOptionPane.YES_NO_OPTION);
-                if (choice == JOptionPane.YES_OPTION) {
-                    if (db.deleteUsers(id)) {
-                        JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success",
-                                JOptionPane.PLAIN_MESSAGE, new ImageIcon("./img/logo.jpg"));
-                        frame.dispose();
-                        new DashboardChef(Login.name, Login.role,Login.surname,Login.id,Login.age,Login.username,Login.password, 0);
-                    }
-
-                    else
-                        JOptionPane.showMessageDialog(null, "Erreur lors du suppression", "Erreur",
-                                JOptionPane.ERROR_MESSAGE);
-
+            if(id != null){
+                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer le patient n=°" + id, "Confirmer", JOptionPane.YES_NO_OPTION);
+            if(choice == JOptionPane.YES_OPTION){
+                if(db.deleteWaitingRoom(id)){
+                    JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success", JOptionPane.PLAIN_MESSAGE, new ImageIcon("./img/logo.jpg"));
+                    frame.dispose();
+                    //new DashboardDoctor(Login.name, Login.role, Login.id,1);
+                    new DashboardDoctor(Login.id, Login.name, Login.surname, Login.age, Login.username, Login.password, Login.role, 1);
                 }
-            } else
-                JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque",
-                        JOptionPane.INFORMATION_MESSAGE);
+                    
+                else
+                    JOptionPane.showMessageDialog(null, "Erreur lors du suppression", "Erreur", JOptionPane.ERROR_MESSAGE);
+
+            }
+            }
+            else
+                JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
 
         });
 
         printBtn = new JButton("Imprimer");
-        printBtn.setBounds(1000, 300, 150, 70);
+        printBtn.setBounds(1000, 400, 150, 70);
         printBtn.setFont(new Font("Arial", Font.BOLD, 20));
         printBtn.setBackground(Color.BLACK);
         printBtn.setForeground(Color.WHITE);
         printBtn.setFocusable(false);
+        
 
-        String[] doctorName = db.getDoctorName();
-        doctor = new JComboBox<String>(doctorName);
-        doctor.setRenderer(new CenteredRenderer());
+        
+        consBtn.addActionListener(e -> {
 
-        doctor.setBounds(1000, 400, 150, 70);
-        doctor.setFont(new Font("Arial", Font.BOLD, 20));
-
-        addBtn.addActionListener(e -> {
-
-            new AddUsers(frame);
-            addBtn.setEnabled(false);
-            deleteBtn.setEnabled(false);
-            printBtn.setEnabled(false);
-
+            if(id != null){
+               new AddConspage(id1,nom,prenom,age,sexe,ntel,adresse );
+               consBtn.setEnabled(false);
+               deleteBtn.setEnabled(false);
+               printBtn.setEnabled(false);
+            }
+            else
+              JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
+            
         });
 
+        editBtn.addActionListener(e -> {
+
+            if(id != null){
+               new EditConsultation(id1,nom,prenom,age,sexe,ntel,adresse );
+               consBtn.setEnabled(false);
+               deleteBtn.setEnabled(false);
+               printBtn.setEnabled(false);
+            }
+            else
+              JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
+            
+        });
+
+        
+        
         tabPanel = new JPanel();
         tabPanel.setLayout(null);
         tabPanel.setBounds(20, 70, 900, 640);
 
-        String header[] = { "Id", "Nom", "Prénom", "Username", "Age", "Role", "Date de recrutement" };
-        String defaultId = db.getDoctorId((String) doctor.getSelectedItem());
-        data = db.getUsers();
+        String header[] = { "Nom", "Prénom", "Age", "Sexe", "N=°Telephone", "Adresse"};
+        data = db.getWaitingRoomById(id1);
 
         DefaultTableModel model = new DefaultTableModel(data, header);
         TableRowSorter sorter = new TableRowSorter<>(model);
 
+        
         table = new JTable(model) {
             public boolean editCellAt(int row, int column, java.util.EventObject e) {
                 return false;
             }
         };
         table.setRowSorter(sorter);
-
-        doctor.addActionListener(e -> {
-            id = null;
-            String id = db.getDoctorId((String) doctor.getSelectedItem());
-            System.out.println(id);
-            Object[][] datatmp = db.getWaitingRoomById(id);
-            data = datatmp;
-            model.setRowCount(0);
-            for (int i = 0; i < datatmp.length; i++) {
-                model.addRow(datatmp[i]);
-                System.out.println(Arrays.toString(datatmp[i]));
-            }
-            model.fireTableDataChanged();
-
-        });
-
+  
+       
+      
+        
         table.setFocusable(false);
         table.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent me) {
                 // to detect doble click events
-                JTable target = (JTable) me.getSource();
-                // int row = target.getSelectedRow(); // select a row
-                // int column = target.getSelectedColumn(); // select a column
-                // JOptionPane.showMessageDialog(null, data[target.getSelectedRow()][4]); // get
-                // the value of a row and column.
-                id = data[target.getSelectedRow()][0].toString();
+                    JTable target = (JTable) me.getSource();                    
+                    id = data[target.getSelectedRow()][6].toString();
+                    nom = data[target.getSelectedRow()][0].toString();
+                    prenom = data[target.getSelectedRow()][1].toString();
+                    age = data[target.getSelectedRow()][2].toString();
+                    sexe = data[target.getSelectedRow()][3].toString();
+                    ntel = data[target.getSelectedRow()][4].toString();
+                    adresse = data[target.getSelectedRow()][5].toString();
+                    System.out.println(id);
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    // TODO Auto-generated method stub
+                    
+                }
                 
-                System.out.println(id);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
+                @Override
+                public void mouseReleased(MouseEvent e) {
                 // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-
+                
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
                 // TODO Auto-generated method stub
-
+                
             }
-
+            
             @Override
             public void mouseExited(MouseEvent e) {
                 // TODO Auto-generated method stub
-
+                
             }
 
         });
-
+        
+        
         table.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         TableColumnModel columnModel = table.getColumnModel();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        columnModel.getColumn(0).setPreferredWidth(128);
-        columnModel.getColumn(0).setMaxWidth(128);
-        columnModel.getColumn(1).setPreferredWidth(128);
-        columnModel.getColumn(1).setMaxWidth(128);
-        columnModel.getColumn(2).setPreferredWidth(128);
-        columnModel.getColumn(2).setMaxWidth(128);
-        columnModel.getColumn(3).setPreferredWidth(128);
-        columnModel.getColumn(3).setMaxWidth(128);
-        columnModel.getColumn(4).setPreferredWidth(128);
-        columnModel.getColumn(4).setMaxWidth(128);
-        columnModel.getColumn(5).setPreferredWidth(128);
-        columnModel.getColumn(5).setMaxWidth(128);
-        columnModel.getColumn(6).setPreferredWidth(128);
-        columnModel.getColumn(6).setMaxWidth(128);
+        columnModel.getColumn(0).setPreferredWidth(150);
+        columnModel.getColumn(0).setMaxWidth(150);
+        columnModel.getColumn(1).setPreferredWidth(150);
+        columnModel.getColumn(1).setMaxWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(150);
+        columnModel.getColumn(2).setMaxWidth(150);
+        columnModel.getColumn(3).setPreferredWidth(150);
+        columnModel.getColumn(3).setMaxWidth(150);
+        columnModel.getColumn(4).setPreferredWidth(150);
+        columnModel.getColumn(4).setMaxWidth(150);
+        columnModel.getColumn(5).setPreferredWidth(148);
+        columnModel.getColumn(5).setMaxWidth(148);
+        
         
 
         JScrollPane sp = new JScrollPane(table);
@@ -224,30 +238,16 @@ public class Users extends JPanel {
 
         tabPanel.add(sp);
         add(tabPanel);
-        add(deleteBtn);
-        add(addBtn);
+        //add(deleteBtn);
+        add(consBtn);
+        add(editBtn);
+        //add(printBtn);
         
+      
         
-
-        // printBtn.addActionListener(new ActionListener(){
-
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // // TODO Auto-generated method stub
-        // MessageFormat header = new MessageFormat("Produit");
-        // MessageFormat footer = new MessageFormat("Page{0,number,integer}");
-
-        // try {
-        // table.print(JTable.PrintMode.FIT_WIDTH, header, footer);
-        // } catch (java.awt.print.PrinterAbortException err) {
-        // } catch (PrinterException ex) {
-        // System.out.println(ex.getMessage());
-        // }
-        // }
-        // });
         searchBar = new JTextField() {
 
-            private final String placeholder = "Rechercher Utilisateur";
+            private final String placeholder = "Rechercher patient";
             private final Color placeholdercolor = new Color(0xC2C2C2);
 
             @Override
@@ -308,15 +308,12 @@ public class Users extends JPanel {
 
         add(searchBar);
         add(lab);
-        setSize(1280, 800);
+        setSize(1200, 800);
 
         setLayout(null);
 
     }
 
-    public static void main(String[] args) {
-        new Users(F);
-    }
 
 }
 
@@ -341,8 +338,7 @@ class dragFrame extends MouseInputAdapter {
 }
 
 class CenteredRenderer extends DefaultListCellRenderer {
-    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-            boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
         setHorizontalAlignment(CENTER);
         return c;
