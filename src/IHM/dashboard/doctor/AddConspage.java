@@ -6,6 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -259,6 +261,18 @@ public class AddConspage extends JFrame {
         print.setBounds(530, 440, 100, 30);
         print.setForeground(Color.BLACK);
         print.setBackground(Color.WHITE);
+        print.addActionListener(e ->{
+            PrinterJob job = PrinterJob.getPrinterJob();
+            job.setPrintable(new function.InvoicePrinter(nom, prenom, age, sexe, ntel, adresse, consField.getText(), ordField1.getText(), priceField.getText()));
+            
+            // Uncomment the following line to display a print dialog
+        // if (job.printDialog()) {
+        try {
+            job.print();
+        } catch (PrinterException err) {
+            err.printStackTrace();
+        }
+        });
        
         savButton = new JButton("Sauvegarder");
         savButton.setBounds(250, 520, 150, 30);

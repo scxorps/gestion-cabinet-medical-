@@ -107,8 +107,15 @@ public class Patients extends JPanel {
         deleteBtn.setFocusable(false);
         deleteBtn.addActionListener(e -> {
             if (id != null) {
-                int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer le patient n=°" + id,
+                int choice; 
+                if(!db.isPatientSubsMoreThanYear(id)){
+                    choice = JOptionPane.showConfirmDialog(null, "Ce patient a des abonnements qui sont moins de 1 an, voulez-vous vraiment supprimer le patient n=°" + id,
                         "Confirmer", JOptionPane.YES_NO_OPTION);
+                }
+                else{
+                    choice = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer le patient n=°" + id,
+                            "Confirmer", JOptionPane.YES_NO_OPTION);
+                }
                 if (choice == JOptionPane.YES_OPTION) {
                     if (db.deletePatient(id)) {
                         JOptionPane.showMessageDialog(null, "Patient a été bien supprimé", "Success",

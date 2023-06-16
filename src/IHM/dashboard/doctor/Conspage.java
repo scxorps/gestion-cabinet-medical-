@@ -1,6 +1,4 @@
 package IHM.dashboard.doctor;
-import java.awt.Color;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -33,6 +31,8 @@ public class Conspage extends JPanel {
     public static JButton editBtn;
     public static JButton deleteBtn;
     public static JButton printBtn;
+    public static JButton refreshBtn;
+
     public static JComboBox<String> doctor;
 
     private Object[][] data;
@@ -118,32 +118,40 @@ public class Conspage extends JPanel {
         printBtn.setBackground(Color.BLACK);
         printBtn.setForeground(Color.WHITE);
         printBtn.setFocusable(false);
-        
 
+        refreshBtn = new JButton("Rafraichir");
+        refreshBtn.setBounds(1000, 500, 150, 70);
+        refreshBtn.setFont(new Font("Arial", Font.BOLD, 20));
+        refreshBtn.setBackground(Color.BLACK);
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFocusable(false);
+
+        
+        
         
         consBtn.addActionListener(e -> {
-
+            
             if(id != null){
-               new AddConspage(id1,nom,prenom,age,sexe,ntel,adresse );
-               consBtn.setEnabled(false);
-               deleteBtn.setEnabled(false);
-               printBtn.setEnabled(false);
+                new AddConspage(id1,nom,prenom,age,sexe,ntel,adresse );
+                consBtn.setEnabled(false);
+                deleteBtn.setEnabled(false);
+                printBtn.setEnabled(false);
             }
             else
-              JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
             
         });
-
+        
         editBtn.addActionListener(e -> {
-
+            
             if(id != null){
-               new EditConsultation(id1,nom,prenom,age,sexe,ntel,adresse );
-               consBtn.setEnabled(false);
-               deleteBtn.setEnabled(false);
-               printBtn.setEnabled(false);
+                new EditConsultation(id1,nom,prenom,age,sexe,ntel,adresse );
+                consBtn.setEnabled(false);
+                deleteBtn.setEnabled(false);
+                printBtn.setEnabled(false);
             }
             else
-              JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
             
         });
 
@@ -152,13 +160,13 @@ public class Conspage extends JPanel {
         tabPanel = new JPanel();
         tabPanel.setLayout(null);
         tabPanel.setBounds(20, 70, 900, 640);
-
+        
         String header[] = { "Nom", "Prénom", "Age", "Sexe", "N=°Telephone", "Adresse"};
         data = db.getWaitingRoomById(id1);
-
+        
         DefaultTableModel model = new DefaultTableModel(data, header);
         TableRowSorter sorter = new TableRowSorter<>(model);
-
+        
         
         table = new JTable(model) {
             public boolean editCellAt(int row, int column, java.util.EventObject e) {
@@ -166,13 +174,24 @@ public class Conspage extends JPanel {
             }
         };
         table.setRowSorter(sorter);
-  
-       
-      
+        
+        
+        refreshBtn.addActionListener(e ->{
+            Object[][] datatmp = db.getWaitingRoomById(id1);
+            data = datatmp;
+            model.setRowCount(0);
+            for (int i = 0; i < datatmp.length; i++) {
+                model.addRow(datatmp[i]);
+                System.out.println(Arrays.toString(datatmp[i]));
+            }
+            model.fireTableDataChanged();
+
+        });
+        
         
         table.setFocusable(false);
         table.addMouseListener(new MouseListener() {
-
+            
             @Override
             public void mouseClicked(MouseEvent me) {
                 // to detect doble click events
@@ -241,6 +260,7 @@ public class Conspage extends JPanel {
         //add(deleteBtn);
         add(consBtn);
         add(editBtn);
+        add(refreshBtn);
         //add(printBtn);
         
       

@@ -15,7 +15,6 @@ public class DashboardChef extends JFrame {
 
     private JButton Acceuil;
     private JButton informations;
-    private JButton finance;
     private JButton logout;
 
     public DashboardChef(String id, String name, String surname, String password , String username, String age,
@@ -37,15 +36,10 @@ public class DashboardChef extends JFrame {
        
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
-        panel2.add(new finance(this));
-
-         JPanel panel3 = new JPanel();
-         panel3.setLayout(null);
-         panel3.add(new informations(this, id, name, surname, age, username, password));
-        // Add the panels to the tabbed pane
+        panel2.add(new informations(this, id, name, surname, age, username, password));
+         
         tabbedPane.addTab("Tab 1", panel1);
         tabbedPane.addTab("Tab 2", panel2);
-        tabbedPane.addTab("Tab 3", panel3); 
         tabbedPane.setBounds(200, -25, 1200, 800);
        
         JLabel xExit = new JLabel("X");
@@ -107,35 +101,15 @@ public class DashboardChef extends JFrame {
         this.Acceuil.addActionListener(e -> {
             tabbedPane.setSelectedIndex(0);
             this.Acceuil.setBackground(new Color(0X011b45));
-            this.finance.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0x07337a));
-            this.finance.setBorder(null);
             this.informations.setBorder(null);
             this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         });
         
-        this.finance = new JButton("finance");
-        this.finance.setBounds(0, 260, 200, 60);
-        this.finance.setForeground(Color.WHITE);
-        this.finance.setFocusable(false);
-        this.finance.setBorder(null);
-        this.finance.setBackground(new Color(0x07337a));
-        this.finance.setFont(new Font("Arial", Font.BOLD, 16));
-
-        this.finance.addActionListener(e -> {
-            
-            tabbedPane.setSelectedIndex(1);
-            this.Acceuil.setBackground(new Color(0x07337a));
-            this.finance.setBackground(new Color(0X011b45));
-            this.informations.setBackground(new Color(0x07337a));
-            this.informations.setBorder(null);
-            this.Acceuil.setBorder(null);
-            this.finance.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
-
-        });
+     
 
         this.informations = new JButton("Informations");
-        this.informations.setBounds(0, 320, 200, 60);
+        this.informations.setBounds(0, 260, 200, 60);
         this.informations.setForeground(Color.white);
         this.informations.setBackground(new Color(0x07337a));
         this.informations.setFocusable(false);
@@ -144,11 +118,9 @@ public class DashboardChef extends JFrame {
 
         this.informations.addActionListener(e -> {
            
-            tabbedPane.setSelectedIndex(2);
-            this.finance.setBackground(new Color(0x07337a));
+            tabbedPane.setSelectedIndex(1);
             this.Acceuil.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0X011b45));
-            this.finance.setBorder(null);
             this.Acceuil.setBorder(null);
             this.informations.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
         });
@@ -178,9 +150,7 @@ public class DashboardChef extends JFrame {
             case 0: {
             tabbedPane.setSelectedIndex(0);
             this.Acceuil.setBackground(new Color(0X011b45));
-            this.finance.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0x07337a));
-            this.finance.setBorder(null);
             this.informations.setBorder(null);
             this.Acceuil.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
             break;
@@ -188,19 +158,7 @@ public class DashboardChef extends JFrame {
             case 1: {
                 tabbedPane.setSelectedIndex(1);
             this.Acceuil.setBackground(new Color(0x07337a));
-            this.finance.setBackground(new Color(0X011b45));
-            this.informations.setBackground(new Color(0x07337a));
-            this.informations.setBorder(null);
-            this.Acceuil.setBorder(null);
-            this.finance.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
-            break;
-            }
-            case 2: {
-                tabbedPane.setSelectedIndex(2);
-            this.finance.setBackground(new Color(0x07337a));
-            this.Acceuil.setBackground(new Color(0x07337a));
             this.informations.setBackground(new Color(0X011b45));
-            this.finance.setBorder(null);
             this.Acceuil.setBorder(null);
             this.informations.setBorder(new MatteBorder(0, 2, 2, 0, Color.red));
             break;
@@ -226,7 +184,6 @@ public class DashboardChef extends JFrame {
         this.setVisible(true);
         p.add(this.informations);
         p.add(this.Acceuil);
-        p.add(this.finance);
         p.add(this.logout);
         add(p);
         add(tabbedPane);

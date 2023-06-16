@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Login",
+            "request": "launch",
+            "mainClass": "IHM.Login",
+            "projectName": "pfe_7751ec16"
+        },
+        {
+            "type": "java",
             "name": "DashboardDoctor",
             "request": "launch",
             "mainClass": "IHM.dashboard.doctor.DashboardDoctor",

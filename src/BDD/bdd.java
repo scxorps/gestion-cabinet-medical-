@@ -158,9 +158,9 @@ public class bdd {
 
     public boolean InsertPatient(String name, String surname, String age, String sexe, String telephone, String adresse,
             Date d, String dc) {
-        String query = "INSERT INTO patient (nom_p, prenom_p, age, sexe, n_tel, adresse, doctor_id, date_r) VALUES ('" + name
+        String query = "INSERT INTO patient (nom_p, prenom_p, age, sexe, n_tel, adresse, doctor_id, date_r, first_day) VALUES ('" + name
                 + "', '"
-                + surname + "', '" + age + "', '" + sexe + "', '" + telephone + "', '" + adresse + "',"+ dc + ",'" + d + "')";
+                + surname + "', '" + age + "', '" + sexe + "', '" + telephone + "', '" + adresse + "',"+ dc + ",'" + d + "', SYSDATE())";
         try {
             stmt = conn.createStatement();
             stmt.executeUpdate(query);
@@ -702,5 +702,23 @@ public int getTotPrix(){
     }
     return 0;
 
+}
+
+public boolean isPatientSubsMoreThanYear(String id){
+   String sql = "SELECT count(*) FROM patient WHERE DATEDIFF(CURDATE(), first_day) > 365 AND n_patient ='" + id + "'";
+    try {
+         stmt = conn.createStatement();
+         rs = stmt.executeQuery(sql);
+         rs.next();
+         if(Integer.parseInt(rs.getString(1)) > 0){
+              return true;
+         }
+         else{
+              return false;
+         }
+    } catch (SQLException e) {
+         e.printStackTrace();
+         return false;
+    }
 }
 }
