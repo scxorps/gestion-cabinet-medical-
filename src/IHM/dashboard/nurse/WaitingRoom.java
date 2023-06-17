@@ -117,7 +117,7 @@ public class WaitingRoom extends JPanel {
                 refreshBtn = new JButton("Actualiser");
         refreshBtn.setBounds(1000, 400, 150, 70);
         refreshBtn.setFont(new Font("Arial", Font.BOLD, 20));
-        refreshBtn.setBackground(new Color(0X011b45));
+        refreshBtn.setBackground(Color.BLACK);
         refreshBtn.setForeground(Color.WHITE);
         refreshBtn.setFocusable(false);
 
@@ -127,7 +127,7 @@ public class WaitingRoom extends JPanel {
         doctor = new JComboBox<String>(doctorName);
         doctor.setRenderer(new CenteredRenderer());
         
-        doctor.setBounds(1000, 400, 150, 70);
+        doctor.setBounds(1000, 500, 150, 70);
         doctor.setFont(new Font("Arial", Font.BOLD, 20));
         
         addBtn.addActionListener(e -> {

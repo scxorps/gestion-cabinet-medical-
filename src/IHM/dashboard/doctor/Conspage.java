@@ -113,14 +113,14 @@ public class Conspage extends JPanel {
         });
 
         printBtn = new JButton("Imprimer");
-        printBtn.setBounds(1000, 400, 150, 70);
+        printBtn.setBounds(1000, 300, 150, 70);
         printBtn.setFont(new Font("Arial", Font.BOLD, 20));
         printBtn.setBackground(Color.BLACK);
         printBtn.setForeground(Color.WHITE);
         printBtn.setFocusable(false);
 
-        refreshBtn = new JButton("Rafraichir");
-        refreshBtn.setBounds(1000, 500, 150, 70);
+        refreshBtn = new JButton("Actualiser");
+        refreshBtn.setBounds(1000, 300, 150, 70);
         refreshBtn.setFont(new Font("Arial", Font.BOLD, 20));
         refreshBtn.setBackground(Color.BLACK);
         refreshBtn.setForeground(Color.WHITE);
@@ -132,10 +132,14 @@ public class Conspage extends JPanel {
         consBtn.addActionListener(e -> {
             
             if(id != null){
-                new AddConspage(id1,nom,prenom,age,sexe,ntel,adresse );
-                consBtn.setEnabled(false);
-                deleteBtn.setEnabled(false);
-                printBtn.setEnabled(false);
+                if(db.isPatientPassedBefore(id))
+                    JOptionPane.showMessageDialog(null, "Ce patient a été déja consulté", "Remarque", JOptionPane.INFORMATION_MESSAGE);
+                else{
+                    new AddConspage(id,nom,prenom,age,sexe,ntel,adresse );
+                    consBtn.setEnabled(false);
+                    deleteBtn.setEnabled(false);
+                    printBtn.setEnabled(false);
+                }
             }
             else
             JOptionPane.showMessageDialog(null, "Veuillez Selectionner un patient", "Remarque", JOptionPane.INFORMATION_MESSAGE);
@@ -196,7 +200,7 @@ public class Conspage extends JPanel {
             public void mouseClicked(MouseEvent me) {
                 // to detect doble click events
                     JTable target = (JTable) me.getSource();                    
-                    id = data[target.getSelectedRow()][6].toString();
+                    id = data[target.getSelectedRow()][7].toString();
                     nom = data[target.getSelectedRow()][0].toString();
                     prenom = data[target.getSelectedRow()][1].toString();
                     age = data[target.getSelectedRow()][2].toString();

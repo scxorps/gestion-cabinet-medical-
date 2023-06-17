@@ -721,4 +721,22 @@ public boolean isPatientSubsMoreThanYear(String id){
          return false;
     }
 }
+
+public boolean isPatientPassedBefore(String id){
+    String sql = "SELECT count(*) FROM consultation WHERE n_patient ='" + id + "' ";
+    try {
+         stmt = conn.createStatement();
+         rs = stmt.executeQuery(sql);
+         rs.next();
+         if(Integer.parseInt(rs.getString(1)) > 0){
+              return true;
+         }
+         else{
+              return false;
+         }
+    } catch (SQLException e) {
+         e.printStackTrace();
+         return false;
+}
+}
 }

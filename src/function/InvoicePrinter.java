@@ -1,10 +1,7 @@
 package function;
 
-
 import java.awt.*;
 import java.awt.print.*;
-
-import javax.swing.ImageIcon;
 
 public class InvoicePrinter implements Printable {
     private String nom;
@@ -36,9 +33,9 @@ public class InvoicePrinter implements Printable {
         }
 
         // Set the font and graphics context
-        Font titleFont = new Font("Arial", Font.BOLD, 28);
-        Font labelFont = new Font("Arial", Font.BOLD, 22);
-        Font valueFont = new Font("Arial", Font.PLAIN, 22);
+        Font titleFont = new Font("Arial", Font.BOLD, 18);
+        Font labelFont = new Font("Arial", Font.BOLD, 12);
+        Font valueFont = new Font("Arial", Font.PLAIN, 12);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setFont(valueFont);
 
@@ -48,38 +45,40 @@ public class InvoicePrinter implements Printable {
         int width = (int) pf.getImageableWidth();
         int height = (int) pf.getImageableHeight();
 
-        ImageIcon logo = new ImageIcon("./src/IMJ/logo1.png");
-        Image scaledLogo = logo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-        g2d.drawImage(scaledLogo, x, y, null);
-
         // Print the invoice content
         g2d.setFont(titleFont);
-        g2d.drawString("Maladie", x + 200, y + 30);
+        g2d.drawString("Invoice", x + 200, y + 30);
 
         g2d.setFont(labelFont);
-        g2d.drawString("Nom:", x, y + 120);
-        g2d.drawString("Prenom:", x, y + 160);
-        g2d.drawString("Age:", x, y + 200);
-        g2d.drawString("Sexe:", x, y + 240);
-        g2d.drawString("N° Tel:", x, y + 280);
-        g2d.drawString("Adresse:", x, y + 320);
-        g2d.drawString("Consultation:", x, y + 400);
-        g2d.drawString("Ordennance:", x, y + 440);
-        g2d.drawString("Price:", x, y + 480);
-
+        g2d.drawString("Nom:", x, y + 60);
+        g2d.drawString("Prenom:", x, y + 80);
+        g2d.drawString("Age:", x, y + 100);
+        g2d.drawString("Sexe:", x, y + 120);
+        g2d.drawString("N° Tel:", x, y + 140);
+        g2d.drawString("Adresse:", x, y + 160);
+        g2d.drawString("Consultaion :", x, y + 200);
+        
         g2d.setFont(valueFont);
-        g2d.drawString(nom, x + 200, y + 120);
-        g2d.drawString(prenom, x + 200, y + 160);
-        g2d.drawString(age, x + 200, y + 200);
-        g2d.drawString(sexe, x + 200, y + 240);
-        g2d.drawString(ntel, x + 200, y + 280);
-        g2d.drawString(adresse, x + 200, y + 320);
-        g2d.drawString(consFieldText, x + 200, y + 400);
-        g2d.drawString(ordField1Text, x + 200, y + 440);
-        g2d.drawString(priceFieldText, x + 200, y + 480);
+        g2d.drawString(nom, x + 100, y + 60);
+        g2d.drawString(prenom, x + 100, y + 80);
+        g2d.drawString(age, x + 100, y + 100);
+        g2d.drawString(sexe, x + 100, y + 120);
+        g2d.drawString(ntel, x + 100, y + 140);
+        g2d.drawString(adresse, x + 100, y + 160);
+        
+        // Split and print the multiline consField
+        String[] consLines = consFieldText.split("\\n");
+        int consLineY = y + 200;
+        for (String line : consLines) {
+            g2d.drawString(line, x + 100, consLineY);
+            consLineY += 20; // Adjust the line spacing (20 pixels here, but you can modify it as needed)
+        }
+        
+        g2d.drawString("Ordannace:", x, y + consLineY + 20);
+        g2d.drawString("Prix:", x, y + consLineY + 40);
+        g2d.drawString(ordField1Text, x + 100, y + consLineY + 20);
+        g2d.drawString(priceFieldText, x + 100, y + consLineY + 40);
 
         return PAGE_EXISTS;
     }
-
-    
 }
