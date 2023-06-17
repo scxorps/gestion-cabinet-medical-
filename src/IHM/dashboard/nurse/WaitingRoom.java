@@ -33,9 +33,12 @@ public class WaitingRoom extends JPanel {
     public static JButton editBtn;
     public static JButton deleteBtn;
     public static JButton printBtn;
+    public static JButton refreshBtn;
     public static JComboBox<String> doctor;
 
     private Object[][] data;
+
+    private String defaultId;
 
     public static JTable table;
 
@@ -111,45 +114,63 @@ public class WaitingRoom extends JPanel {
         printBtn.setForeground(Color.WHITE);
         printBtn.setFocusable(false);
 
+                refreshBtn = new JButton("Actualiser");
+        refreshBtn.setBounds(1000, 400, 150, 70);
+        refreshBtn.setFont(new Font("Arial", Font.BOLD, 20));
+        refreshBtn.setBackground(new Color(0X011b45));
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setFocusable(false);
+
+        
+        
         String[] doctorName = db.getDoctorName();
         doctor = new JComboBox<String>(doctorName);
         doctor.setRenderer(new CenteredRenderer());
-
+        
         doctor.setBounds(1000, 400, 150, 70);
         doctor.setFont(new Font("Arial", Font.BOLD, 20));
-
+        
         addBtn.addActionListener(e -> {
-
+            
             new AddWaitingRoom(frame);
             addBtn.setEnabled(false);
             deleteBtn.setEnabled(false);
             printBtn.setEnabled(false);
-
+            
         });
-
+        
         tabPanel = new JPanel();
         tabPanel.setLayout(null);
         tabPanel.setBounds(20, 70, 900, 640);
-
+        
         String header[] = { "Nom", "Prénom", "Age", "Sexe", "N=°Telephone", "Adresse", "Prix a payer" };
-        String defaultId = db.getDoctorId((String) doctor.getSelectedItem());
+        defaultId = db.getDoctorId((String) doctor.getSelectedItem());
         data = db.getWaitingRoomById(defaultId);
-
+        
         DefaultTableModel model = new DefaultTableModel(data, header);
         TableRowSorter sorter = new TableRowSorter<>(model);
-
+        
         table = new JTable(model) {
             public boolean editCellAt(int row, int column, java.util.EventObject e) {
                 return false;
             }
         };
-        table.setRowSorter(sorter);
+        refreshBtn.addActionListener(e -> {
+            Object[][] datatmp = db.getWaitingRoomById(defaultId);
+            data = datatmp;
+            model.setRowCount(0);
+            for (int i = 0; i < datatmp.length; i++) {
+                model.addRow(datatmp[i]);
+                System.out.println(Arrays.toString(datatmp[i]));
+            }
+            model.fireTableDataChanged();
 
+        });
+        table.setRowSorter(sorter);
+        
         doctor.addActionListener(e -> {
-            id = null;
-            String id = db.getDoctorId((String) doctor.getSelectedItem());
-            System.out.println(id);
-            Object[][] datatmp = db.getWaitingRoomById(id);
+            defaultId = db.getDoctorId((String) doctor.getSelectedItem());
+            Object[][] datatmp = db.getWaitingRoomById(defaultId);
             data = datatmp;
             model.setRowCount(0);
             for (int i = 0; i < datatmp.length; i++) {
@@ -236,6 +257,7 @@ public class WaitingRoom extends JPanel {
         add(deleteBtn);
         add(addBtn);
         add(printBtn);
+        add(refreshBtn);
         add(doctor);
 
         printBtn.addActionListener(new ActionListener(){

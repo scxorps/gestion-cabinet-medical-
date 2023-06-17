@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 16, 2023 at 12:12 PM
+-- Generation Time: Jun 17, 2023 at 09:21 AM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
 
@@ -62,6 +62,29 @@ CREATE TABLE IF NOT EXISTS `consultation` (
   `ordonnance` varchar(500) NOT NULL,
   `prix` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `consultation`
+--
+
+INSERT INTO `consultation` (`n_patient`, `anc_maladie`, `notes_cons`, `ordonnance`, `prix`) VALUES
+(12, 'qqdssdqd', 'qdsqdqdqdsq', 'Paracétamole - dwa', 2000),
+(12, 'dsqdqd', 'sqddsqdqsd', 'Doliprane', 3000),
+(12, 'gfdgfdgdfg', 'fdgdfgfgdgdg', 'Doliprane', 4500),
+(12, 'fsfdsdffds', 'fdsfdsfdsfds', 'Paracétamole', 5000);
+
+--
+-- Triggers `consultation`
+--
+DROP TRIGGER IF EXISTS `update_waiting_room_price`;
+DELIMITER $$
+CREATE TRIGGER `update_waiting_room_price` AFTER INSERT ON `consultation` FOR EACH ROW BEGIN
+    UPDATE waiting_room
+    SET price = NEW.prix
+    WHERE n_patient = NEW.n_patient;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -202,7 +225,7 @@ CREATE TABLE IF NOT EXISTS `waiting_room` (
 INSERT INTO `waiting_room` (`doctor_id`, `n_patient`, `place`, `price`) VALUES
 (11, 10, 3, 0),
 (11, 11, 4, 0),
-(2, 12, 5, 0);
+(2, 12, 5, 5000);
 
 --
 -- Constraints for dumped tables

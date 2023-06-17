@@ -81,27 +81,5 @@ public class InvoicePrinter implements Printable {
         return PAGE_EXISTS;
     }
 
-    public static void main(String[] args) {
-        String nom = "John";
-        String prenom = "Doe";
-        String age = "30";
-        String sexe = "Male";
-        String ntel = "123456789";
-        String adresse = "123 Main St";
-        String consFieldText = "Consultation";
-        String ordField1Text = "Order 1";
-        String priceFieldText = "$100.00";
-
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(new InvoicePrinter(nom, prenom, age, sexe, ntel, adresse, consFieldText, ordField1Text, priceFieldText));
-
-        // Uncomment the following line to display a print dialog
-        // if (job.printDialog()) {
-        try {
-            job.print();
-        } catch (PrinterException e) {
-            e.printStackTrace();
-        }
-        // }
-    }
+    
 }
