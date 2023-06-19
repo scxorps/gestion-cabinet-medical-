@@ -53,7 +53,7 @@ public class Conspage extends JPanel {
     private String search;
     public static JFrame F;
     public static String ro;
-    Conspage(JFrame frame,String r,String id1){
+    Conspage(JFrame frame, String name, String surname, String r,String id1){
         bdd db = new bdd();
 
         ImageIcon bg = new ImageIcon("./img/bgP.jpg");
@@ -135,7 +135,7 @@ public class Conspage extends JPanel {
                 if(db.isPatientPassedBefore(id))
                     JOptionPane.showMessageDialog(null, "Ce patient a été déja consulté", "Remarque", JOptionPane.INFORMATION_MESSAGE);
                 else{
-                    new AddConspage(id,nom,prenom,age,sexe,ntel,adresse );
+                    new AddConspage(id,name,surname,nom,prenom,age,sexe,ntel,adresse );
                     consBtn.setEnabled(false);
                     deleteBtn.setEnabled(false);
                     printBtn.setEnabled(false);
@@ -149,7 +149,7 @@ public class Conspage extends JPanel {
         editBtn.addActionListener(e -> {
             
             if(id != null){
-                new EditConsultation(id1,nom,prenom,age,sexe,ntel,adresse );
+                new EditConsultation(id1, name, surname, nom,prenom,age,sexe,ntel,adresse );
                 consBtn.setEnabled(false);
                 deleteBtn.setEnabled(false);
                 printBtn.setEnabled(false);

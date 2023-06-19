@@ -36,7 +36,7 @@ public class AddConspage extends JFrame {
     private String med;
     private JLabel title;
 
-    public AddConspage(String id1,String nom,String prenom,String age,String sexe,String ntel,String adresse) {
+    public AddConspage(String id1,String name, String surname,String nom,String prenom,String age,String sexe,String ntel,String adresse) {
         super("Ajouter Patient");
         bdd db = new bdd();
         dragFrame move = new dragFrame(this);
@@ -263,7 +263,7 @@ public class AddConspage extends JFrame {
         print.setBackground(Color.WHITE);
         print.addActionListener(e ->{
             PrinterJob job = PrinterJob.getPrinterJob();
-            job.setPrintable(new function.InvoicePrinter(nom, prenom, age, sexe, ntel, adresse, consField.getText(), ordField1.getText(), priceField.getText()));
+            job.setPrintable(new function.InvoicePrinter(name, surname, nom, prenom, age, sexe, ntel, adresse, consField.getText(), ordField1.getText(), priceField.getText()));
             
             // Uncomment the following line to display a print dialog
         // if (job.printDialog()) {

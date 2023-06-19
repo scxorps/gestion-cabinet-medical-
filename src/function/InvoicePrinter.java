@@ -13,8 +13,10 @@ public class InvoicePrinter implements Printable {
     private String consFieldText;
     private String ordField1Text;
     private String priceFieldText;
+    private String nameDoc;
+    private String surnameDoc;
 
-    public InvoicePrinter(String nom, String prenom, String age, String sexe, String ntel, String adresse, String consFieldText, String ordField1Text, String priceFieldText) {
+    public InvoicePrinter(String nameDoc, String surnameDoc, String nom, String prenom, String age, String sexe, String ntel, String adresse, String consFieldText, String ordField1Text, String priceFieldText) {
         this.nom = nom;
         this.prenom = prenom;
         this.age = age;
@@ -24,6 +26,8 @@ public class InvoicePrinter implements Printable {
         this.consFieldText = consFieldText;
         this.ordField1Text = ordField1Text;
         this.priceFieldText = priceFieldText;
+        this.nameDoc = nameDoc;
+        this.surnameDoc = surnameDoc;
     }
 
     @Override
@@ -47,7 +51,8 @@ public class InvoicePrinter implements Printable {
 
         // Print the invoice content
         g2d.setFont(titleFont);
-        g2d.drawString("Invoice", x + 200, y + 30);
+        g2d.drawString("MED+", x + 225, y + 20);
+        g2d.drawString("Consultation ", x + 200, y + 40);
 
         g2d.setFont(labelFont);
         g2d.drawString("Nom:", x, y + 60);
@@ -79,6 +84,11 @@ public class InvoicePrinter implements Printable {
         g2d.drawString(ordField1Text, x + 100, y + consLineY + 20);
         g2d.drawString(priceFieldText, x + 100, y + consLineY + 40);
 
+        g2d.setFont(labelFont);
+        g2d.drawString("Docteur :", x, y + consLineY + 60);
+
+        g2d.setFont(valueFont);
+        g2d.drawString(nameDoc + " " + surnameDoc, x + 100, y + consLineY + 60);
         return PAGE_EXISTS;
     }
 }

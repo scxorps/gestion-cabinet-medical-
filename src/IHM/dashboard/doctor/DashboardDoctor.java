@@ -80,7 +80,7 @@ public class DashboardDoctor extends JFrame {
         
         JPanel panel1 = new JPanel();
         panel1.setLayout(null);
-        panel1.add(new Conspage(this,role,id));
+        panel1.add(new Conspage(this, name, surname, role,id));
         
         JPanel panel2 = new JPanel();
         panel2.setLayout(null);
